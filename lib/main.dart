@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wegesha_client/screens/sign_in.dart';
+import 'package:wegesha_client/screens/Splash.dart';
 
 void main() {
   runApp(const MyApp());
@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AuthScreen(),
+      home: Splash(),
     );
   }
 }
