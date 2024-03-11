@@ -20,6 +20,7 @@ class _AuthScreenState extends State<AuthScreen> {
 
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       body: Column(
         children: [
@@ -27,16 +28,16 @@ class _AuthScreenState extends State<AuthScreen> {
             decoration: const InputDecoration(icon: Icon(Icons.person)),
             controller: _userName,
             onSubmitted: (String str) {
-              print(_userName.text);
-              print(str);
+              // print(_userName.text);
+              // print(str);
             },
           ),
           TextField(
             decoration: const InputDecoration(icon: Icon(Icons.person)),
             controller: _password,
             onSubmitted: (String str) {
-              print(_userName.text);
-              print(str);
+              // print(_userName.text);
+              // print(str);
             },
           ),
         ],
