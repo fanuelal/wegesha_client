@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:wegesha_client/config/theme.dart';
 import '../widget/Button.dart';
 
 class AuthType extends StatefulWidget {
@@ -14,10 +16,42 @@ class _AuthTypeState extends State<AuthType> {
     final size = MediaQuery.of(context).size;
     return Column(
       children: [
-        SizedBox(
-            height: size.height * 0.5,
-            width: size.width * 0.8,
-            child: Image.asset('assets/logo.png')),
+        Column(
+          children: [
+            SizedBox(
+                height: size.height * 0.5,
+                width: size.width * 0.8,
+                child: Image.asset('assets/logo.png')),
+            Column(
+              children: [
+                DefaultTextStyle(
+                  style: GoogleFonts.inter(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      color: ColorTheme.black),
+                  child: const Text(
+                    "Let’s get started!",
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(
+                      vertical: size.height * 0.1,
+                      horizontal: size.width * 0.1),
+                  child: DefaultTextStyle(
+                    style: GoogleFonts.inter(
+                        fontWeight: FontWeight.normal,
+                        fontSize: 16,
+                        color: ColorTheme.gray),
+                    child: const Text(
+                      "Login to enjoy the features we’ve provided, and stay healthy!",
+                    ),
+                  ),
+                ),
+                //
+              ],
+            )
+          ],
+        ),
         Button(
             title: "Login",
             height: 0.1,
