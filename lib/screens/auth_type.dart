@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widget/Button.dart';
 
-
 class AuthType extends StatefulWidget {
   const AuthType({super.key});
 
@@ -12,13 +11,29 @@ class AuthType extends StatefulWidget {
 class _AuthTypeState extends State<AuthType> {
   @override
   Widget build(BuildContext context) {
-    // final size = MediaQuery.of(context).size;
+    final size = MediaQuery.of(context).size;
     return Column(
-          children: [
-    Image.asset('assets/logo.png'),
-    // Button(height: 0.1, width: 0.5, onTap: () {}, isElevated: false),
-    Button(height: 0.1, width: 0.5, onTap: () {},)
-          ],
-        );
+      children: [
+        SizedBox(
+            height: size.height * 0.5,
+            width: size.width * 0.8,
+            child: Image.asset('assets/logo.png')),
+        Button(
+            title: "Login",
+            height: 0.1,
+            width: 0.75,
+            onTap: () {},
+            isElevated: false),
+        const SizedBox(
+          height: 16,
+        ),
+        Button(
+          title: "Sign Up",
+          height: 0.1,
+          width: 0.75,
+          onTap: () {},
+        )
+      ],
+    );
   }
 }

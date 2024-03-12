@@ -7,9 +7,11 @@ class Button extends StatelessWidget {
   final double height;
   final double width;
   final Function()? onTap;
+  final String title;
   late bool isElevated = false;
   Button(
       {super.key,
+      required this.title,
       required this.height,
       required this.width,
       required this.onTap,
@@ -29,13 +31,16 @@ class Button extends StatelessWidget {
                   RoundedRectangleBorder(
                       side: BorderSide(color: ColorTheme.primaryColor),
                       borderRadius: BorderRadius.circular(32))),
-              foregroundColor:
-                  MaterialStateProperty.all<Color>(isElevated? ColorTheme.white : ColorTheme.primaryColor),
-              
-              backgroundColor:
-                  isElevated ? MaterialStateProperty.all<Color>(ColorTheme.primaryColor) : MaterialStateProperty.all<Color>(ColorTheme.white)),
+              foregroundColor: MaterialStateProperty.all<Color>(
+                  isElevated ? ColorTheme.white : ColorTheme.primaryColor),
+              backgroundColor: isElevated
+                  ? MaterialStateProperty.all<Color>(ColorTheme.primaryColor)
+                  : MaterialStateProperty.all<Color>(ColorTheme.white)),
           onPressed: onTap,
-          child: const Text('Login')),
+          child: Text(
+            title,
+            style: const TextStyle(fontWeight: FontWeight.w400),
+          )),
     );
   }
 }
