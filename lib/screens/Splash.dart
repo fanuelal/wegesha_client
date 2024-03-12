@@ -32,7 +32,7 @@ class _SplashState extends State<Splash> {
         child: Container(
           child: AspectRatio(
       aspectRatio: 9/16,
-      child: Image.asset('assets/logo_1.png',))
+      child: Image.asset('assets/logo.png',))
         
 
         ),
