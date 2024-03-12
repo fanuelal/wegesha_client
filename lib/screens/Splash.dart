@@ -1,7 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:wegesha_client/screens/sign_in.dart';
+import 'package:wegesha_client/screens/auth_board.dart';
+
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -14,7 +15,7 @@ class _SplashState extends State<Splash> {
   @override
   void initState(){
     super.initState();
-    Timer(Duration(milliseconds: 1500), () => {
+    Timer(Duration(milliseconds: 2500), () => {
       Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>AuthScreen()))
     });
 
@@ -23,11 +24,19 @@ class _SplashState extends State<Splash> {
    @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+      backgroundColor: const Color(0xff199A8E),
+        
       body: Center(
+        
         child: Container(
-          child: Text('Wegesha'),
+          child: AspectRatio(
+      aspectRatio: 9/16,
+      child: Image.asset('assets/logo_1.png',))
+        
 
         ),
+       
       ),
     );
   }
