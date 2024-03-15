@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import '../config/theme.dart';
 
@@ -30,6 +28,7 @@ class _InputFiledState extends State<InputFiled> {
     return TextField(
       controller: widget.controller,
       decoration: InputDecoration(
+        filled: true,
         fillColor: ColorTheme.grayBorder,
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(24),
@@ -42,9 +41,12 @@ class _InputFiledState extends State<InputFiled> {
         hintText: widget.placeholder,
         hintStyle: TextStyle(
             color: widget.isError ? ColorTheme.red : ColorTheme.iconGrey),
-        prefixIcon: Icon(
-          widget.prefixIcon,
-          color: ColorTheme.iconGrey,
+        prefixIcon: Padding(
+          padding: const EdgeInsets.only(left: 10),
+          child: Icon(
+            widget.prefixIcon,
+            color: ColorTheme.iconGrey,
+          ),
         ),
         suffixIcon: Icon(widget.suffixIcon, color: ColorTheme.iconGrey),
         prefixIconColor: widget.controller.text == ""
