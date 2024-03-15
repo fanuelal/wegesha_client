@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_onboarding_slider/flutter_onboarding_slider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wegesha_client/config/theme.dart';
