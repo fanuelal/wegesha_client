@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:wegesha_client/screens/Splash.dart';
 // import 'screens/auth_type.dart';
+// import 'package:wegesha_client/screens/sign_in.dart';
 
 void main() {
   runApp(const MyApp());

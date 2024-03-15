@@ -14,60 +14,69 @@ class _AuthTypeState extends State<AuthType> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return Column(
-      children: [
-        Column(
-          children: [
-            SizedBox(
-                height: size.height * 0.5,
-                width: size.width * 0.8,
-                child: Image.asset('assets/logo.png')),
-            Column(
-              children: [
-                DefaultTextStyle(
-                  style: GoogleFonts.inter(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 22,
-                      color: ColorTheme.black),
-                  child: const Text(
-                    "Let’s get started!",
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(
-                      vertical: size.height * 0.1,
-                      horizontal: size.width * 0.1),
-                  child: DefaultTextStyle(
+    return SafeArea(
+      child: Column(
+        children: [
+          Column(
+            children: [
+              Container(
+                  margin: EdgeInsets.only(top: size.height * 0.1),
+                  height: size.height * 0.3,
+                  width: size.width * 0.8,
+                  child: Image.asset('assets/logo.png')),
+              Column(
+                children: [
+                  DefaultTextStyle(
                     style: GoogleFonts.inter(
-                        fontWeight: FontWeight.normal,
-                        fontSize: 16,
-                        color: ColorTheme.gray),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                        color: ColorTheme.black),
                     child: const Text(
-                      "Login to enjoy the features we’ve provided, and stay healthy!",
+                      "Let’s get started!",
                     ),
                   ),
-                ),
-                //
-              ],
-            )
-          ],
-        ),
-        Button(
-            title: "Login",
-            height: 0.1,
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: size.height * 0.01,
+                        left: size.width * 0.15,
+                        right: size.width * 0.1,
+                        bottom: size.height * 0.1),
+                    child: DefaultTextStyle(
+                      style: GoogleFonts.inter(
+                          
+                          fontWeight: FontWeight.normal,
+                          fontSize: 16,
+                          color: ColorTheme.gray),
+                      child: const Text(
+                        "Login to enjoy the features we’ve provided, and stay healthy!",
+                        softWrap: true,
+                        overflow: TextOverflow.fade,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                  //
+                ],
+              )
+            ],
+          ),
+          Button(
+              title: "Login",
+              height: 0.07,
+              width: 0.75,
+              onTap: () {},
+              isElevated: false),
+          const SizedBox(
+            height: 16,
+          ),
+          Button(
+            title: "Sign Up",
+            height: 0.07,
             width: 0.75,
             onTap: () {},
-            isElevated: false),
-        const SizedBox(
-          height: 16,
-        ),
-        Button(
-          title: "Sign Up",
-          height: 0.1,
-          width: 0.75,
-          onTap: () {},
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }
