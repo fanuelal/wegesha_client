@@ -66,10 +66,10 @@ class _AuthPageState extends State<AuthPage> {
           child: InputFiled(
             controller: passwordController,
             prefixIcon: Icons.person_3_outlined,
-            suffixIcon: Icons.remove_red_eye,
             placeholder: "Enter your name",
             color: ColorTheme.primaryColor,
             isError: false,
+            
           ),
         ),
         Container(
@@ -82,10 +82,10 @@ class _AuthPageState extends State<AuthPage> {
           child: InputFiled(
             controller: passwordController,
             prefixIcon: Icons.email_outlined,
-            suffixIcon: Icons.remove_red_eye,
             placeholder: "Enter your email",
             color: ColorTheme.primaryColor,
             isError: false,
+
           ),
         ),
         Container(
@@ -98,10 +98,11 @@ class _AuthPageState extends State<AuthPage> {
           child: InputFiled(
             controller: passwordController,
             prefixIcon: Icons.lock_outline,
-            suffixIcon: Icons.remove_red_eye,
+            suffixIcon: Icons.remove_red_eye_sharp,
             placeholder: "Enter your password",
             color: ColorTheme.primaryColor,
             isError: false,
+            suffixIconNeeded: true,
           ),
         ),
         Container(
@@ -228,7 +229,6 @@ class _AuthPageState extends State<AuthPage> {
         child: InputFiled(
           controller: emailController,
           prefixIcon: Icons.email_outlined,
-          suffixIcon: Icons.remove_red_eye,
           placeholder: "Enter your email",
           color: ColorTheme.primaryColor,
           isError: false,
@@ -248,6 +248,7 @@ class _AuthPageState extends State<AuthPage> {
           placeholder: "Enter your password",
           color: ColorTheme.primaryColor,
           isError: false,
+          suffixIconNeeded: true,
         ),
       ),
       Container(
