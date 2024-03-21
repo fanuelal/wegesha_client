@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import '../config/theme.dart';
 
 class InputFiled extends StatefulWidget {
-  late TextEditingController controller;
-  IconData prefixIcon;
-  late IconData suffixIcon;
-  String placeholder;
-  Color color;
-  bool isError;
-  bool suffixIconNeeded;
+  final TextEditingController controller;
+  final IconData prefixIcon;
+  final IconData suffixIcon;
+  final String placeholder;
+  final Color color;
+  final bool isError;
+  final bool suffixIconNeeded;
   // void onChanged;
   InputFiled({
     super.key,
