@@ -8,4 +8,5 @@ class ColorTheme {
   static Color grayBorder = const Color(0xffE5E7EB);
   static Color iconGrey = const Color(0xffA1A8B0);
   static Color red = const Color(0xffFF5C5C);
+  static Color lightGray = const Color(0xffF9FAFB);
 }

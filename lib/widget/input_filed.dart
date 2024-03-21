@@ -8,15 +8,18 @@ class InputFiled extends StatefulWidget {
   String placeholder;
   Color color;
   bool isError;
+  bool suffixIconNeeded;
   // void onChanged;
-  InputFiled(
-      {super.key,
-      required this.controller,
-      required this.prefixIcon,
-      required this.suffixIcon,
-      required this.placeholder,
-      required this.color,
-      required this.isError,});
+  InputFiled({
+    super.key,
+    required this.controller,
+    required this.prefixIcon,
+    this.suffixIcon = Icons.remove_red_eye_outlined,
+    required this.placeholder,
+    required this.color,
+    required this.isError,
+    this.suffixIconNeeded = false
+  });
 
   @override
   State<InputFiled> createState() => _InputFiledState();
@@ -29,7 +32,7 @@ class _InputFiledState extends State<InputFiled> {
       controller: widget.controller,
       decoration: InputDecoration(
         filled: true,
-        fillColor: ColorTheme.grayBorder,
+        fillColor: ColorTheme.lightGray,
         enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(24),
             borderSide: BorderSide(
@@ -48,7 +51,7 @@ class _InputFiledState extends State<InputFiled> {
             color: ColorTheme.iconGrey,
           ),
         ),
-        suffixIcon: Icon(widget.suffixIcon, color: ColorTheme.iconGrey),
+         suffixIcon: widget.suffixIconNeeded? Icon(widget.suffixIcon, color: ColorTheme.iconGrey): const Spacer(),
         prefixIconColor: widget.controller.text == ""
             ? ColorTheme.gray
             : ColorTheme.primaryColor,
