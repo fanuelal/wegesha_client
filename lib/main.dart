@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import './screens/auth_page.dart';
+import 'screens/home_screen.dart';
 // import 'screens/auth_type.dart';
 // import 'package:wegesha_client/screens/sign_in.dart';
 
@@ -18,7 +19,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home:  const AuthPage(title: "Login",),
+      home:  HomeScreen(),
     );
   }
 }

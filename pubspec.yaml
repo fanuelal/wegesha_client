@@ -38,6 +38,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   flutter_onboarding_slider: ^1.0.11
   google_fonts: 6.1.0
+  material_symbols_icons: ^4.2719.3
 
 dev_dependencies:
   flutter_test:
