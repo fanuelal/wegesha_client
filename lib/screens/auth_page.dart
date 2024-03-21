@@ -20,6 +20,10 @@ class _AuthPageState extends State<AuthPage> {
     final size = MediaQuery.of(context).size;
     TextEditingController emailController = TextEditingController();
     TextEditingController passwordController = TextEditingController();
+    TextEditingController signupemailController = TextEditingController();
+    TextEditingController signuppasswordController = TextEditingController();
+    TextEditingController signupusernameController = TextEditingController();
+
     bool isLoginTitle = widget.title.toLowerCase() == 'login';
     bool checkBoxValue = false;
     return Scaffold(
@@ -45,7 +49,12 @@ class _AuthPageState extends State<AuthPage> {
           children: [
             isLoginTitle
                 ? SignInAuth(size, emailController, passwordController, context)
-                : SignUpAuth(size, passwordController, checkBoxValue)
+                : SignUpAuth(
+                    size,
+                    signupemailController,
+                    signuppasswordController,
+                    signupusernameController,
+                    checkBoxValue)
           ],
         ),
       ),
@@ -53,7 +62,11 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Column SignUpAuth(
-      Size size, TextEditingController passwordController, checkBoxValue) {
+      Size size,
+      TextEditingController signupemailController,
+      TextEditingController signuppasswordController,
+      TextEditingController signupusernameController,
+      checkBoxValue) {
     return Column(
       children: [
         Container(
@@ -64,7 +77,7 @@ class _AuthPageState extends State<AuthPage> {
               left: size.width * 0.03),
 
           child: InputFiled(
-            controller: passwordController,
+            controller: signupusernameController,
             prefixIcon: Icons.person_3_outlined,
             suffixIcon: Icons.remove_red_eye,
             placeholder: "Enter your name",
@@ -80,7 +93,7 @@ class _AuthPageState extends State<AuthPage> {
               left: size.width * 0.03),
 
           child: InputFiled(
-            controller: passwordController,
+            controller: signupemailController,
             prefixIcon: Icons.email_outlined,
             suffixIcon: Icons.remove_red_eye,
             placeholder: "Enter your email",
@@ -96,7 +109,7 @@ class _AuthPageState extends State<AuthPage> {
               left: size.width * 0.03),
 
           child: InputFiled(
-            controller: passwordController,
+            controller: signuppasswordController,
             prefixIcon: Icons.lock_outline,
             suffixIcon: Icons.remove_red_eye,
             placeholder: "Enter your password",
@@ -109,14 +122,13 @@ class _AuthPageState extends State<AuthPage> {
           child: Row(
             children: [
               Checkbox(
-                checkColor: Colors.green,
                 value: checkBoxValue,
                 onChanged: (bool? value) {
                   setState(() {
-                    checkBoxValue = !checkBoxValue;
-                    // print(!checkBoxValue);
+                    checkBoxValue = value ?? false;
                   });
                 },
+                activeColor: Colors.orange,
               ), //
               Expanded(
                 child: RichText(
@@ -180,37 +192,37 @@ class _AuthPageState extends State<AuthPage> {
               isElevated: true),
         ),
         Container(
-        margin: EdgeInsets.only(top: size.height * 0.05),
-        child: RichText(
-          text: TextSpan(
-            text: "Have an account? ",
-            style: GoogleFonts.inter(
-              color: ColorTheme.gray,
-              fontSize: 15,
-            ),
-            children: [
-              TextSpan(
-                text: 'Sign in',
-                style: GoogleFonts.inter(
-                  color: ColorTheme.primaryColor,
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    // Add your sign up logic here
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const AuthPage(
-                                  title: 'Login',
-                                )));
-                  },
+          margin: EdgeInsets.only(top: size.height * 0.05),
+          child: RichText(
+            text: TextSpan(
+              text: "Have an account? ",
+              style: GoogleFonts.inter(
+                color: ColorTheme.gray,
+                fontSize: 15,
               ),
-            ],
+              children: [
+                TextSpan(
+                  text: 'Sign in',
+                  style: GoogleFonts.inter(
+                    color: ColorTheme.primaryColor,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      // Add your sign up logic here
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AuthPage(
+                                    title: 'Login',
+                                  )));
+                    },
+                ),
+              ],
+            ),
           ),
-        ),
-      )
+        )
       ],
     );
   }
