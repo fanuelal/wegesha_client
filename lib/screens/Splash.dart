@@ -1,9 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:wegesha_client/screens/auth_board.dart';
 import 'onboarding.dart';
-
 
 class Splash extends StatefulWidget {
   const Splash({super.key});
@@ -14,31 +12,24 @@ class Splash extends StatefulWidget {
 
 class _SplashState extends State<Splash> {
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    Timer(Duration(milliseconds: 2500), () => {
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>OnBoarding()))
-    });
+    Timer(
+        const Duration(milliseconds: 2500),
+        () => Navigator.pushReplacement(
+            context, MaterialPageRoute(builder: (context) => OnBoarding())));
+  }
 
-}
-
-   @override
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       backgroundColor: const Color(0xff199A8E),
-        
       body: Center(
-        
-        
-        child: Container(
-          child: AspectRatio(
-      aspectRatio: 9/16,
-      child: Image.asset('assets/white_logo.png',))
-        
-
-        ),
-       
+        child: AspectRatio(
+            aspectRatio: 9 / 16,
+            child: Image.asset(
+              'assets/white_logo.png',
+            )),
       ),
     );
   }
