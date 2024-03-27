@@ -39,6 +39,7 @@ dependencies:
   flutter_onboarding_slider: ^1.0.11
   google_fonts: 6.1.0
   material_symbols_icons: ^4.2719.3
+  awesome_bottom_bar: ^1.2.4
 
 dev_dependencies:
   flutter_test:
