@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wegesha_client/config/theme.dart';
+import 'package:wegesha_client/screens/auth_page.dart';
 import '../widget/Button.dart';
 
 class AuthType extends StatefulWidget {
@@ -43,7 +44,6 @@ class _AuthTypeState extends State<AuthType> {
                         bottom: size.height * 0.1),
                     child: DefaultTextStyle(
                       style: GoogleFonts.inter(
-                          
                           fontWeight: FontWeight.normal,
                           fontSize: 16,
                           color: ColorTheme.gray),
@@ -64,7 +64,10 @@ class _AuthTypeState extends State<AuthType> {
               title: "Login",
               height: 0.07,
               width: 0.75,
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => const AuthPage(title: 'Login',)));
+              },
               isElevated: false),
           const SizedBox(
             height: 16,
@@ -73,7 +76,10 @@ class _AuthTypeState extends State<AuthType> {
             title: "Sign Up",
             height: 0.07,
             width: 0.75,
-            onTap: () {},
+             onTap: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => const AuthPage(title: 'Sign Up',)));
+              },
           )
         ],
       ),

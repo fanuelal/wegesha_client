@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:quickalert/quickalert.dart';
+import '../widget/Button.dart';
 
 
 class Alert extends StatefulWidget {
@@ -20,15 +21,15 @@ class _AlertState extends State<Alert> {
 
   if (quickAlertType == QuickAlertType.success) {
     title = "Yeay!Welcome Back ";
-    content = "Once again you logged in successfully\n into Wegesha app.";
+    content = "Once again you login successfully\n into Wegesha app.";
    iconData = Icons.check_circle;
-    iconColor = Colors.green;
+    iconColor = const Color.fromARGB(255, 17, 122, 112);
 
   } else if (quickAlertType == QuickAlertType.error) {
     title = "Error!";
     content = "Please try again.";
     iconData = Icons.error;
-     iconColor = Colors.red;
+     iconColor = const Color(0xffFF5C5C);
   }
   showDialog(
     context: context,
@@ -59,32 +60,32 @@ class _AlertState extends State<Alert> {
         
         actions: <Widget>[
           if (quickAlertType == QuickAlertType.success)
-         
-            TextButton(
-              onPressed: () {
-              
-                Navigator.of(context).pop(); 
-              },
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(const Color(0xFF199A8E)),
-                     foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+             Align(
+                  alignment: Alignment.center,
+                  child: Button(
+                    title: 'Go To Home',
+                    height: 0.06,
+                    width: 0.2,
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
-              child:  const Text("Go to Home"),
-            ),
+         
+         
           if (quickAlertType == QuickAlertType.error)
-         
-            TextButton(
-              onPressed: () {
-                
-                Navigator.of(context).pop(); 
-              },
-                 style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(const Color(0xff199A8E)),
-                     foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+            Align(
+                  alignment: Alignment.center,
+                  child: Button(
+                    title: 'Please Check',
+                    height: 0.06,
+                    width: 0.2,
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
                 ),
-                
-              child:const Text("Please check"),
-            ),
+         
         ],
       ),
       );
