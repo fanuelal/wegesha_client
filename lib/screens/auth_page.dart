@@ -31,7 +31,7 @@ class _AuthPageState extends State<AuthPage> {
         centerTitle: true,
         title: Text(
           widget.title,
-          style: TextStyle(
+          style: GoogleFonts.inter(
             color: ColorTheme.black,
             fontSize: 18,
             fontWeight: FontWeight.bold,

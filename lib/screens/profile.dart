@@ -20,6 +20,10 @@ class _ProfileState extends State<Profile> {
           decoration: BoxDecoration(
             color: ColorTheme.primaryColor,
           ),
+// RecentWidget(
+//                   "https://t3.ftcdn.net/jpg/02/60/04/08/360_F_260040863_fYxB1SnrzgJ9AOkcT0hoe7IEFtsPiHAD.jpg",
+//                   "Dr. Marcus"),
+          
           child: Container(
             margin: EdgeInsets.only(top: size.height * 0.45),
             decoration: BoxDecoration(
@@ -30,5 +34,16 @@ class _ProfileState extends State<Profile> {
             
           )),
     );
+      Column RecentWidget(image, name) {
+    return Column(
+      children: [
+        CircleAvatar(
+          radius: 32,
+          backgroundImage: NetworkImage(image),
+        ),
+        Text(name)
+      ],
+    );
+  }
   }
 }
