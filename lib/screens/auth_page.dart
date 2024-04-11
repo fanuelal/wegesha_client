@@ -42,7 +42,7 @@ class _AuthPageState extends State<AuthPage> {
         centerTitle: true,
         title: Text(
           widget.title,
-          style: TextStyle(
+          style: GoogleFonts.inter(
             color: ColorTheme.black,
             fontSize: 18,
             fontWeight: FontWeight.bold,
@@ -198,14 +198,13 @@ class _AuthPageState extends State<AuthPage> {
           child: Row(
             children: [
               Checkbox(
-                checkColor: Colors.green,
                 value: checkBoxValue,
                 onChanged: (bool? value) {
                   setState(() {
-                    checkBoxValue = !checkBoxValue;
-                    // print(!checkBoxValue);
+                    checkBoxValue = value ?? false;
                   });
                 },
+                activeColor: Colors.orange,
               ), //
               RichText(
                 text: TextSpan(

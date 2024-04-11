@@ -8,7 +8,7 @@ import '../widget/bottomNavBar.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
-  TextEditingController searchController = TextEditingController();
+  final TextEditingController searchController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
