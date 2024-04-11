@@ -3,7 +3,7 @@ import '../config/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 // ignore: must_be_immutable
-class Button extends StatelessWidget {
+class Button extends StatefulWidget {
   final double height;
   final double width;
   final Function()? onTap;
@@ -18,11 +18,17 @@ class Button extends StatelessWidget {
       this.isElevated = true});
 
   @override
+  State<Button> createState() => _ButtonState();
+}
+
+class _ButtonState extends State<Button> {
+  bool isProcessing = false;
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return SizedBox(
-      height: size.height * height,
-      width: size.width * width,
+      height: size.height * widget.height,
+      width: size.width * widget.width,
       child: ElevatedButton(
           style: ButtonStyle(
               textStyle: MaterialStateProperty.all<TextStyle>(
@@ -32,15 +38,27 @@ class Button extends StatelessWidget {
                       side: BorderSide(color: ColorTheme.primaryColor),
                       borderRadius: BorderRadius.circular(32))),
               foregroundColor: MaterialStateProperty.all<Color>(
-                  isElevated ? ColorTheme.white : ColorTheme.primaryColor),
-              backgroundColor: isElevated
+                  widget.isElevated
+                      ? ColorTheme.white
+                      : ColorTheme.primaryColor),
+              backgroundColor: widget.isElevated
                   ? MaterialStateProperty.all<Color>(ColorTheme.primaryColor)
                   : MaterialStateProperty.all<Color>(ColorTheme.white)),
-          onPressed: onTap,
-          child: Text(
-            title,
-            style: const TextStyle(fontWeight: FontWeight.w400),
-          )),
+          onPressed: () async {
+            setState(() {
+              isProcessing = true;
+            });
+            await widget.onTap;
+            setState(() {
+              isProcessing = false;
+            });
+          },
+          child: isProcessing
+              ? const CircularProgressIndicator()
+              : Text(
+                  widget.title,
+                  style: const TextStyle(fontWeight: FontWeight.w400),
+                )),
     );
   }
 }

@@ -40,6 +40,12 @@ dependencies:
   google_fonts: 6.1.0
   material_symbols_icons: ^4.2719.3
   awesome_bottom_bar: ^1.2.4
+  google_maps_flutter: ^2.5.3
+  provider: ^6.1.2
+  http: ^1.2.0
+  syncfusion_flutter_datepicker: ^25.1.39
+  intl: ^0.19.0
+  date_picker_plus: ^3.0.2
 
 dev_dependencies:
   flutter_test:
