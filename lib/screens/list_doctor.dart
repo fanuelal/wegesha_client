@@ -1,6 +1,8 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables
 
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:wegesha_client/config/theme.dart';
 
 import '../widget/listTileWidget.dart';
 
@@ -78,11 +80,13 @@ class list_doctorState extends State<list_doctor> {
         centerTitle: true,
         // ignore: prefer_const_constructors
         title: Text(
-          'Top Doctor',
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
+            "Top Doctor",
+            style: GoogleFonts.inter(
+              color: ColorTheme.black,
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+            ),
           ),
-        ),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.more_vert),
