@@ -1,14 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:wegesha_client/screens/auth_page.dart';
-// import 'package:wegesha_client/screens/Splash.dart';
-// import 'package:wegesha_client/screens/profile.dart';
-// import './screens/auth_page.dart';
-// import 'screens/home_screen.dart';
-// import 'screens/auth_type.dart';
-// import 'package:wegesha_client/screens/sign_in.dart';
+import 'package:provider/provider.dart';
+import 'package:wegesha_client/screens/auth_board.dart';
+import './provider/auth.dart';
+import 'provider/user.provider.dart';
+import 'screens/auth_page.dart';
+import 'screens/mapScreen.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => Auth()),
+        ChangeNotifierProvider(create: (_) => UserProvider())
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -22,7 +30,10 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AuthPage(title: "Login",),
+      // home: const AuthPage(title: 'Login'),
+      home: AuthPage(
+        title: "login",
+      ),
     );
   }
 }

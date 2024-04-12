@@ -110,10 +110,32 @@ class HomeScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              Text("Your Recent Doctors"),
-              RecentWidget(
-                  "https://t3.ftcdn.net/jpg/02/60/04/08/360_F_260040863_fYxB1SnrzgJ9AOkcT0hoe7IEFtsPiHAD.jpg",
-                  "Dr. Marcus")
+              SizedBox(
+                height: size.height * 0.05,
+              ),
+              const Text("Your Recent Doctors"),
+              SizedBox(
+                height: size.height * 0.04,
+              ),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    RecentWidget(
+                        "https://img.freepik.com/free-photo/woman-doctor-wearing-lab-coat-with-stethoscope-isolated_1303-29791.jpg",
+                        "Dr. Marcus",
+                        size),
+                    RecentWidget(
+                        "https://t3.ftcdn.net/jpg/02/60/04/08/360_F_260040863_fYxB1SnrzgJ9AOkcT0hoe7IEFtsPiHAD.jpg",
+                        "Dr. Marcus",
+                        size),
+                    RecentWidget(
+                        "https://t4.ftcdn.net/jpg/03/20/52/31/360_F_320523164_tx7Rdd7I2XDTvvKfz2oRuRpKOPE5z0ni.jpg",
+                        "Dr. Marcus",
+                        size),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -121,15 +143,18 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Column RecentWidget(image, name) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 32,
-          backgroundImage: NetworkImage(image),
-        ),
-        Text(name)
-      ],
+  Container RecentWidget(image, name, size) {
+    return Container(
+      margin: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 32,
+            backgroundImage: NetworkImage(image),
+          ),
+          Text(name)
+        ],
+      ),
     );
   }
 

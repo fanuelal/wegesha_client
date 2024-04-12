@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import '../config/theme.dart';
 
 class InputFiled extends StatefulWidget {
-  final TextEditingController controller;
-  final IconData prefixIcon;
-  final IconData suffixIcon;
-  final String placeholder;
-  final Color color;
-  final bool isError;
-  final bool suffixIconNeeded;
+  late TextEditingController controller;
+  IconData prefixIcon;
+  late IconData suffixIcon;
+  String placeholder;
+  Color color;
+  bool isError;
+  bool suffixIconNeeded;
+  bool isPassword;
   // void onChanged;
-  InputFiled({
-    super.key,
-    required this.controller,
-    required this.prefixIcon,
-    this.suffixIcon = Icons.remove_red_eye_outlined,
-    required this.placeholder,
-    required this.color,
-    required this.isError,
-    this.suffixIconNeeded = false
-  });
+  InputFiled(
+      {super.key,
+      required this.controller,
+      required this.prefixIcon,
+      this.suffixIcon = Icons.remove_red_eye_outlined,
+      required this.placeholder,
+      required this.color,
+      required this.isError,
+      this.suffixIconNeeded = false,
+      this.isPassword = false});
 
   @override
   State<InputFiled> createState() => _InputFiledState();
@@ -30,6 +31,7 @@ class _InputFiledState extends State<InputFiled> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
+      obscureText: widget.isPassword,
       decoration: InputDecoration(
         filled: true,
         fillColor: ColorTheme.lightGray,
@@ -51,12 +53,20 @@ class _InputFiledState extends State<InputFiled> {
             color: ColorTheme.iconGrey,
           ),
         ),
-         suffixIcon: widget.suffixIconNeeded? Icon(widget.suffixIcon, color: ColorTheme.iconGrey): const Spacer(),
+        suffixIcon: widget.suffixIconNeeded
+            ? IconButton(
+                icon: Icon(widget.suffixIcon),
+                onPressed: () {
+                  setState(() {
+                    widget.isPassword = !widget.isPassword;
+                  });
+                },
+                color: ColorTheme.iconGrey)
+            : const Spacer(),
         prefixIconColor: widget.controller.text == ""
             ? ColorTheme.gray
             : ColorTheme.primaryColor,
       ),
-      // onChanged: widget.onChanged,
     );
   }
 }

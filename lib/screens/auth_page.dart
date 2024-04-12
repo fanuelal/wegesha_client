@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:wegesha_client/config/theme.dart';
-import 'package:wegesha_client/widget/Button.dart';
-import 'package:wegesha_client/widget/input_filed.dart';
+import 'package:date_picker_plus/date_picker_plus.dart';
+import 'package:wegesha_client/provider/user.provider.dart';
+import 'package:wegesha_client/screens/home_screen.dart';
+import '../config/theme.dart';
+import '../widget/Button.dart';
+import '../widget/input_filed.dart';
+import '../provider/auth.dart';
+import 'package:provider/provider.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key, required this.title}) : super(key: key);
@@ -15,17 +20,23 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  void dispose() {
+    // Dispose the controllers when the widget is disposed
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    TextEditingController emailController = TextEditingController();
-    TextEditingController passwordController = TextEditingController();
-    TextEditingController signupemailController = TextEditingController();
-    TextEditingController signuppasswordController = TextEditingController();
-    TextEditingController signupusernameController = TextEditingController();
-
     bool isLoginTitle = widget.title.toLowerCase() == 'login';
     bool checkBoxValue = false;
+    bool isLogging = false;
+    final auth = Provider.of<Auth>(context, listen: false);
+    final user = Provider.of(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -44,82 +55,146 @@ class _AuthPageState extends State<AuthPage> {
           },
         ),
       ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            isLoginTitle
-                ? SignInAuth(size, emailController, passwordController, context)
-                : SignUpAuth(
-                    size,
-                    signupemailController,
-                    signuppasswordController,
-                    signupusernameController,
-                    checkBoxValue)
-          ],
+      body: SingleChildScrollView(
+        child: SafeArea(
+          child: Column(
+            children: [
+              isLoginTitle
+                  ? SignInAuth(size, emailController, passwordController,
+                      context, isLogging, auth)
+                  : SignUpAuth(size, passwordController, checkBoxValue, user)
+            ],
+          ),
         ),
       ),
     );
   }
 
-  Column SignUpAuth(
-      Size size,
-      TextEditingController signupemailController,
-      TextEditingController signuppasswordController,
-      TextEditingController signupusernameController,
-      checkBoxValue) {
+  Widget SignUpAuth(Size size, TextEditingController passwordController,
+      checkBoxValue, UserProvider user) {
+    DateTime dob;
+    var pickedDate;
+    TextEditingController firstName = TextEditingController();
+    TextEditingController lastName = TextEditingController();
+    TextEditingController email = TextEditingController();
+    TextEditingController password = TextEditingController();
     return Column(
       children: [
         Container(
           //  margin: const EdgeInsets.symmetric(vertical:100, horizontal: 10),
           margin: EdgeInsets.only(
-              top: size.height * 0.05,
+              top: size.height * 0.02,
               right: size.width * 0.03,
               left: size.width * 0.03),
 
           child: InputFiled(
-            controller: signupusernameController,
+            controller: firstName,
             prefixIcon: Icons.person_3_outlined,
-            placeholder: "Enter your name",
+            placeholder: "First Name",
             color: ColorTheme.primaryColor,
             isError: false,
-            
           ),
         ),
         Container(
           //  margin: const EdgeInsets.symmetric(vertical:100, horizontal: 10),
           margin: EdgeInsets.only(
-              top: size.height * 0.05,
+              top: size.height * 0.02,
               right: size.width * 0.03,
               left: size.width * 0.03),
 
           child: InputFiled(
-            controller: signupemailController,
+            controller: lastName,
+            prefixIcon: Icons.person_3_outlined,
+            placeholder: "Last Name",
+            color: ColorTheme.primaryColor,
+            isError: false,
+          ),
+        ),
+        Container(
+          //  margin: const EdgeInsets.symmetric(vertical:100, horizontal: 10),
+          margin: EdgeInsets.only(
+              top: size.height * 0.02,
+              right: size.width * 0.03,
+              left: size.width * 0.03),
+
+          child: InputFiled(
+            controller: email,
             prefixIcon: Icons.email_outlined,
-            placeholder: "Enter your email",
+            placeholder: "Email",
             color: ColorTheme.primaryColor,
             isError: false,
-
           ),
         ),
         Container(
           //  margin: const EdgeInsets.symmetric(vertical:100, horizontal: 10),
           margin: EdgeInsets.only(
-              top: size.height * 0.05,
+              top: size.height * 0.02,
               right: size.width * 0.03,
               left: size.width * 0.03),
 
           child: InputFiled(
-            controller: signuppasswordController,
+            controller: password,
             prefixIcon: Icons.lock_outline,
             suffixIcon: Icons.remove_red_eye_sharp,
-            placeholder: "Enter your password",
+            placeholder: "Password",
             color: ColorTheme.primaryColor,
             isError: false,
             suffixIconNeeded: true,
+            isPassword: true,
           ),
         ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: TextButton.icon(
+            icon: const Icon(Icons.calendar_view_day_rounded),
+            label: Text('Date of Birth'),
+            style: ButtonStyle(
+              fixedSize: MaterialStateProperty.all<Size>(
+                  Size(size.width * 0.9, size.height * 0.065)),
+              textStyle: MaterialStateProperty.all<TextStyle>(
+                  GoogleFonts.inter(fontSize: 16)),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                      side: BorderSide(color: ColorTheme.primaryColor),
+                      borderRadius: BorderRadius.circular(32))),
+              foregroundColor:
+                  MaterialStateProperty.all<Color>(ColorTheme.primaryColor),
+              // backgroundColor:
+              //     MaterialStateProperty.all<Color>(ColorTheme.primaryColor)
+            ),
+            onPressed: () async {
+              pickedDate = await showDatePickerDialog(
+                splashColor: ColorTheme.primaryColor,
+                leadingDateTextStyle: TextStyle(color: ColorTheme.primaryColor),
+                slidersColor: ColorTheme.primaryColor,
+                currentDateTextStyle: TextStyle(
+                    color: ColorTheme.primaryColor,
+                    fontWeight: FontWeight.bold),
+                currentDateDecoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: ColorTheme.primaryColor)),
+                highlightColor: ColorTheme.primaryColor,
+                context: context,
+                minDate: DateTime(1900, 1, 1),
+                maxDate: DateTime(DateTime.now().year, DateTime.now().month,
+                    DateTime.now().day),
+              );
+              Map<String, dynamic> jsonCreate = {
+                "firstName": firstName,
+                "lastName": lastName,
+                "email": email,
+                "password": password,
+                "datePicked": pickedDate
+              };
+              String response = await user.createUser(jsonCreate);
+              SnackBar snackBar = SnackBar(content: Text(response));
+              ScaffoldMessenger.of(context).showSnackBar(snackBar);
+            },
+          ),
+        ),
+        // Text(),
         Container(
-          margin: EdgeInsets.only(top: size.height * 0.05),
+          margin: EdgeInsets.only(top: size.height * 0.02),
           child: Row(
             children: [
               Checkbox(
@@ -131,46 +206,44 @@ class _AuthPageState extends State<AuthPage> {
                 },
                 activeColor: Colors.orange,
               ), //
-              Expanded(
-                child: RichText(
-                  text: TextSpan(
-                    text: "I agree to the wegesha client ",
-                    style: GoogleFonts.inter(
-                      color: ColorTheme.gray,
-                      fontSize: 15,
-                    ),
-                    children: [
-                      TextSpan(
-                        text: 'Terms of Service',
-                        style: GoogleFonts.inter(
-                          color: ColorTheme.primaryColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        recognizer: TapGestureRecognizer()..onTap = () {},
-                      ),
-                      TextSpan(
-                        text: ' and ',
-                        style: GoogleFonts.inter(
-                          color: ColorTheme.gray,
-                          fontSize: 15,
-                        ),
-                        recognizer: TapGestureRecognizer()..onTap = () {},
-                      ),
-                      TextSpan(
-                        text: 'Privacy Policy',
-                        style: GoogleFonts.inter(
-                          color: ColorTheme.primaryColor,
-                          fontSize: 15,
-                          fontWeight: FontWeight.bold,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            // Add your logic here
-                          },
-                      ),
-                    ],
+              RichText(
+                text: TextSpan(
+                  text: "I agree to the wegesha client ",
+                  style: GoogleFonts.inter(
+                    color: ColorTheme.gray,
+                    fontSize: 15,
                   ),
+                  children: [
+                    TextSpan(
+                      text: '\n Terms of Service',
+                      style: GoogleFonts.inter(
+                        color: ColorTheme.primaryColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      recognizer: TapGestureRecognizer()..onTap = () {},
+                    ),
+                    TextSpan(
+                      text: ' and ',
+                      style: GoogleFonts.inter(
+                        color: ColorTheme.gray,
+                        fontSize: 15,
+                      ),
+                      recognizer: TapGestureRecognizer()..onTap = () {},
+                    ),
+                    TextSpan(
+                      text: 'Privacy Policy',
+                      style: GoogleFonts.inter(
+                        color: ColorTheme.primaryColor,
+                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          // Add your logic here
+                        },
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -228,16 +301,27 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  Column SignInAuth(Size size, TextEditingController emailController,
-      TextEditingController passwordController, BuildContext context) {
+  Column SignInAuth(
+      Size size,
+      TextEditingController emailController,
+      TextEditingController passwordController,
+      BuildContext context,
+      bool isLogging,
+      Auth authProvider) {
+    Auth auth = Auth();
+    // var result = false;
+    // Future<void> SignIN() async {
+    //   // setState(() async {
+    //   result = await auth.signIn(emailController.text, passwordController.text);
+    //   // });
+    // }
+
     return Column(children: [
       Container(
-        // margin: const EdgeInsets.symmetric(vertical: 100, horizontal: 10),
         margin: EdgeInsets.only(
             top: size.height * 0.05,
             right: size.width * 0.03,
             left: size.width * 0.03),
-
         child: InputFiled(
           controller: emailController,
           prefixIcon: Icons.email_outlined,
@@ -261,6 +345,7 @@ class _AuthPageState extends State<AuthPage> {
           color: ColorTheme.primaryColor,
           isError: false,
           suffixIconNeeded: true,
+          isPassword: true,
         ),
       ),
       Container(
@@ -277,19 +362,34 @@ class _AuthPageState extends State<AuthPage> {
       ),
       Container(
         margin: EdgeInsets.only(top: size.height * 0.05),
-        child: Button(
-            title: "Login",
-            height: 0.07,
-            width: 0.75,
-            onTap: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const AuthPage(
-                            title: 'Login',
-                          )));
-            },
-            isElevated: true),
+        child: isLogging
+            ? const CircularProgressIndicator()
+            : Button(
+                title: "Login",
+                height: 0.07,
+                width: 0.75,
+                onTap: () async {
+                  setState(() {
+                    isLogging = true;
+                  });
+                  final response = await auth.signIn(
+                      emailController.text, passwordController.text);
+                  setState(() {
+                    isLogging = false;
+                  });
+                  if (auth.isLoggedIn) {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => HomeScreen()));
+                  } else {
+                    SnackBar snackBar = SnackBar(
+                      content: Text(response),
+                      backgroundColor: Colors.red,
+                    );
+
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  }
+                },
+                isElevated: true),
       ),
       Container(
         margin: EdgeInsets.only(top: size.height * 0.05),
