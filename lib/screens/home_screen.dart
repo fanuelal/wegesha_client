@@ -15,7 +15,6 @@ class HomeScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
-      bottomNavigationBar: BottomNav(),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(

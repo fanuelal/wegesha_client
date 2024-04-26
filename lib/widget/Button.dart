@@ -6,7 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 class Button extends StatefulWidget {
   final double height;
   final double width;
-  final Function()? onTap;
+  final Function() onTap;
   final String title;
   late bool isElevated = false;
   Button(
@@ -48,7 +48,7 @@ class _ButtonState extends State<Button> {
             setState(() {
               isProcessing = true;
             });
-            await widget.onTap;
+            widget.onTap();
             setState(() {
               isProcessing = false;
             });

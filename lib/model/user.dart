@@ -49,3 +49,19 @@ class UserModel {
     };
   }
 }
+
+
+// "id": "9e033d75-b094-47eb-8f25-23d6c908cc2c",
+//       "email": "fan@gmail.com",
+//       "password": "$2b$10$5AL4wAO5o.PW.aL2RKYP4OSQ6TpuRqFGMjXs6fbvCqECVutQGu.Na",
+//       "firstName": "Fanuel",
+//       "lastName": "Almaw",
+//       "phoneNumber": null,
+//       "dateOfBirth": "2000-03-09",
+//       "userType": "client",
+//       "location": null,
+//       "isOnline": true,
+//       "profilePicture": null,
+//       "createdAt": "2024-04-12T19:00:14.000Z",
+//       "updatedAt": "2024-04-12T19:00:14.000Z"
+//     }

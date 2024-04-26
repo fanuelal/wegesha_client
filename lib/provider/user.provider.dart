@@ -8,15 +8,18 @@ import '../config/utils.dart';
 class UserProvider extends ChangeNotifier {
   Future<String> createUser(Map<String, dynamic> user) async {
     String url = "${Utils.baseUrl}/user";
+
+    print(user);
     try {
       user['userType'] = 'client';
-      final response =
-          await http.post(Uri.parse(url), body: {jsonEncode(user)});
+      final response = await http.post(Uri.parse(url), body: user);
       final decodedData = jsonDecode(response.body);
-      if (decodedData.statusCode == 200) {
-        return decodedData.message;
+      if (response.statusCode == 200) {
+        print(decodedData['message']);
+        return decodedData['message'];
       }
-      return decodedData.message;
+      print(decodedData['message']);
+      return decodedData['message'];
     } catch (error) {
       throw (error);
     }

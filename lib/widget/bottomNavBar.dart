@@ -2,6 +2,8 @@ import 'package:awesome_bottom_bar/widgets/inspired/inspired.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
 import 'package:wegesha_client/config/theme.dart';
+import 'package:wegesha_client/screens/home_screen.dart';
+import 'package:wegesha_client/screens/profile.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -12,23 +14,22 @@ class BottomNav extends StatefulWidget {
 
 class _BottomNavState extends State<BottomNav> {
   List<TabItem> items = [
-    TabItem(
+    const TabItem(
       icon: Icons.home_rounded,
     ),
-    TabItem(
-      icon: Icons.chat_bubble_outline,
+    const TabItem(
+      icon: Icons.history,
     ),
-    TabItem(
+    const TabItem(
       icon: Icons.calendar_month_rounded,
     ),
-    TabItem(
+    const TabItem(
       icon: Icons.person_2_rounded,
     ),
   ];
   int visit = 0;
 
-  @override
-  Widget build(BuildContext context) {
+  Widget BottomNav() {
     return BottomBarInspiredFancy(
       items: items,
       backgroundColor: Colors.white,
@@ -39,6 +40,20 @@ class _BottomNavState extends State<BottomNav> {
       onTap: (int index) => setState(() {
         visit = index;
       }),
+    );
+  }
+
+  List<Widget> pages = [
+    HomeScreen(),
+    const SafeArea(child: Text("History Doctor")),
+    const SafeArea(child: Text("Scheduled Histories")),
+    const Profile(),
+  ];
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: BottomNav(),
+      body: pages[visit],
     );
   }
 }

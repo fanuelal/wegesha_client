@@ -15,7 +15,6 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-      bottomNavigationBar: const BottomNav(),
       body: Container(
           decoration: BoxDecoration(
             color: ColorTheme.primaryColor,
