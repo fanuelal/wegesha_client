@@ -83,13 +83,7 @@ class HomeScreen extends StatelessWidget {
                       "Doctor"),
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
-                child: TextButton(
-                  child: Text("see all"),
-                  onPressed: () {},
-                ),
-              ),
+             
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -133,6 +127,18 @@ class HomeScreen extends StatelessWidget {
                         "Dr. Marcus",
                         size),
                   ],
+                ),
+              ),
+               Padding(
+                padding: EdgeInsets.symmetric(horizontal: size.width * 0.1),
+                child: TextButton(
+                  child: Text("see all"),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      
+                      MaterialPageRoute(builder: (context) => )
+                    )
+                  },
                 ),
               ),
             ],

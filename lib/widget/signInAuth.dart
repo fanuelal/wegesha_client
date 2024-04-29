@@ -42,7 +42,6 @@ class _SignInAuthState extends State<SignInAuth> {
         ),
       ),
       Container(
-        //  margin: const EdgeInsets.symmetric(vertical:100, horizontal: 10),
         margin: EdgeInsets.only(
             top: size.height * 0.05,
             right: size.width * 0.03,
@@ -89,7 +88,7 @@ class _SignInAuthState extends State<SignInAuth> {
                     isLogging = false;
                   });
                   if (auth.isLoggedIn) {
-                    Navigator.push(context,
+                    Navigator.pushReplacement(context,
                         MaterialPageRoute(builder: (context) => BottomNav()));
                   } else {
                     SnackBar snackBar = SnackBar(

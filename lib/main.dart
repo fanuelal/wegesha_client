@@ -31,6 +31,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       // home: const AuthPage(title: 'Login'),
+      routes: [
+        
+      ],
       home: AuthPage(
         title: "login",
       ),
