@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wegesha_client/screens/auth_board.dart';
+import 'package:wegesha_client/screens/home_screen.dart';
+import 'package:wegesha_client/screens/profile.dart';
 import './provider/auth.dart';
 import 'provider/user.provider.dart';
 import 'screens/auth_page.dart';
@@ -30,11 +32,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      // home: const AuthPage(title: 'Login'),
-      routes: [
-        
-      ],
-      home: AuthPage(
+      routes: {
+        HomeScreen.route:(context) => HomeScreen(),
+        Profile.route:(context) => const Profile(),
+      },
+      home: const AuthPage(
         title: "login",
       ),
     );

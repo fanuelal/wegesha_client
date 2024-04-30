@@ -5,6 +5,8 @@ import 'package:wegesha_client/config/theme.dart';
 import 'package:wegesha_client/screens/home_screen.dart';
 import 'package:wegesha_client/screens/profile.dart';
 
+import '../screens/appointment.dart';
+
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
 
@@ -18,7 +20,7 @@ class _BottomNavState extends State<BottomNav> {
       icon: Icons.home_rounded,
     ),
     const TabItem(
-      icon: Icons.history,
+      icon: Icons.document_scanner,
     ),
     const TabItem(
       icon: Icons.calendar_month_rounded,
@@ -45,7 +47,7 @@ class _BottomNavState extends State<BottomNav> {
 
   List<Widget> pages = [
     HomeScreen(),
-    const SafeArea(child: Text("History Doctor")),
+    const Appointment(),
     const SafeArea(child: Text("Scheduled Histories")),
     const Profile(),
   ];

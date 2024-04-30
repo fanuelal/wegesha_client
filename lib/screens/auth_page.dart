@@ -56,12 +56,6 @@ class _AuthPageState extends State<AuthPage> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        // leading: IconButton(
-        //   icon: Icon(Icons.arrow_back_ios, color: ColorTheme.black),
-        //   onPressed: () {
-        //     Navigator.pop(context);
-        //   },
-        // ),
       ),
       body: SingleChildScrollView(
         child: SafeArea(

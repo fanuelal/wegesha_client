@@ -3,11 +3,11 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wegesha_client/config/theme.dart';
-import 'package:wegesha_client/widget/bottomNavBar.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
 class Profile extends StatefulWidget {
   const Profile({super.key});
+  static String route = '/profile';
 
   @override
   State<Profile> createState() => _ProfileState();

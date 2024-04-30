@@ -6,10 +6,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wegesha_client/config/theme.dart';
+import 'package:wegesha_client/screens/appointment.dart';
 import 'package:wegesha_client/widget/Button.dart';
 import 'package:wegesha_client/widget/datewidget.dart';
 import 'package:intl/intl.dart';
 import 'package:wegesha_client/widget/timewidget.dart';
+
+import '../widget/listTileWidget.dart';
 
 class Detail extends StatefulWidget {
   const Detail({super.key});
@@ -100,12 +103,17 @@ class _DetailState extends State<Detail> {
         ),
         body: SafeArea(
             child: SingleChildScrollView(
-              child: Column(children: [
-                        Container(
-              height: size.height * 0.2,
-              color: ColorTheme.iconGrey,
-                        ),
-                        Container(
+          child: Column(children: [
+            ListTileWidget(
+              size: size,
+              name: "Dr Helen Abebe",
+              distance: "100KM",
+              filedStudy: "doctor",
+              rate: 4,
+              imageUrl:
+                  "https://i.pinimg.com/originals/7c/23/13/7c2313f8d49ff41e48982af55d5938f9.png",
+            ),
+            Container(
                 margin: EdgeInsets.only(
                     top: size.height * 0.03, left: size.width * 0.04),
                 alignment: Alignment.topLeft,
@@ -117,7 +125,7 @@ class _DetailState extends State<Detail> {
                     fontWeight: FontWeight.bold,
                   ),
                 )),
-                        Container(
+            Container(
                 margin: EdgeInsets.only(
                     top: size.height * 0.03, left: size.width * 0.04),
                 alignment: Alignment.topLeft,
@@ -141,7 +149,7 @@ class _DetailState extends State<Detail> {
                         )
                       ]),
                 )),
-                        Container(
+            Container(
               height: size.height * 0.15,
               child: ListView.builder(
                 scrollDirection: Axis.horizontal,
@@ -150,30 +158,26 @@ class _DetailState extends State<Detail> {
                   final itemsList = getDatesAndDaysUntilEndOfMonth();
                   final slicedDate = itemsList[index]['date'].split("-")[2];
                   final slicedDay = itemsList[index]['day'].substring(0, 3);
-              
+
                   return DateOfMonth(date: slicedDate, day: slicedDay);
                 },
               ),
-                        ),
-                        getTimeWidget(),
-                        Container(
-              margin: EdgeInsets.only(top: size.height*0.02),
+            ),
+            getTimeWidget(),
+            Container(
+              margin: EdgeInsets.only(
+                  top: size.height * 0.02, bottom: size.height * 0.02),
               child: Button(
-                title: "Book Apointment",
-                height: 0.07,
-                width: 0.75,
-                onTap: () {
-                  // Navigator.push(
-                  //     context,
-                  //     MaterialPageRoute(
-                  //         builder: (context) => const AuthPage(
-                  //               title: 'Login',
-                  //             )));
-                },
-                isElevated: true),
-                      ),
-                        
-                      ]),
-            )));
+                  title: "Book Apointment",
+                  height: 0.07,
+                  width: 0.75,
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => Appointment()));
+                  },
+                  isElevated: true),
+            ),
+          ]),
+        )));
   }
 }
