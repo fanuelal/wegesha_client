@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wegesha_client/config/theme.dart';
@@ -11,13 +13,6 @@ class MyAppointment extends StatefulWidget {
 }
 
 class _MyAppointmentState extends State<MyAppointment> {
-  int activeFilter = 1;
-  void menuNavigator(int currentIndex) {
-    setState(() {
-      activeFilter = currentIndex;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -45,7 +40,7 @@ class _MyAppointmentState extends State<MyAppointment> {
                   ],
                 ),
               ),
-              ScheduleWidgetMenu(size),
+              CustomeTopMenu(),
               SizedBox(
                 height: size.height * 0.04,
               ),
@@ -82,8 +77,26 @@ class _MyAppointmentState extends State<MyAppointment> {
       ),
     );
   }
+}
 
-  Container ScheduleWidgetMenu(Size size) {
+class CustomeTopMenu extends StatefulWidget {
+  const CustomeTopMenu({super.key});
+
+  @override
+  State<CustomeTopMenu> createState() => _CustomeTopMenuState();
+}
+
+class _CustomeTopMenuState extends State<CustomeTopMenu> {
+  int activeFilter = 0;
+  void menuNavigator(int currentIndex) {
+    setState(() {
+      activeFilter = currentIndex;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
     return Container(
       height: size.height * 0.06,
       margin: EdgeInsets.symmetric(horizontal: size.width * 0.05),
@@ -168,5 +181,6 @@ class _MyAppointmentState extends State<MyAppointment> {
         ],
       ),
     );
+    ;
   }
 }
