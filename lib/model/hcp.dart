@@ -1,8 +1,8 @@
 import './user.dart';
 
-class HPC {
+class HCP {
   final String specialty;
-  final String experienceYears;
+  final int experienceYears;
   final int rateCount;
   final double rated;
   final firstname;
@@ -11,7 +11,7 @@ class HPC {
   bool isOnline;
   final String profilePicture;
   final description;
-  HPC(
+  HCP(
       {required this.specialty,
       required this.experienceYears,
       required this.rateCount,
@@ -23,8 +23,8 @@ class HPC {
       required this.profilePicture,
       required this.description});
 
-  factory HPC.fromJson(Map<String, dynamic> json) {
-    return HPC(
+  factory HCP.fromJson(Map<String, dynamic> json) {
+    return HCP(
         specialty: json["specialty"],
         experienceYears: json["experienceYears"],
         rateCount: json["rateCount"],
@@ -34,7 +34,7 @@ class HPC {
         profilePicture: json["profilePicture"],
         description: json["description"]);
   }
-  Map<String, dynamic> toMap(HPC hpc) {
+  Map<String, dynamic> toMap(HCP hpc) {
     return {
       'firstname': hpc.firstname,
       'lastName': hpc.lastName,
