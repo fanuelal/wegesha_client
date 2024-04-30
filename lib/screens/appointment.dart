@@ -7,6 +7,7 @@ import 'package:wegesha_client/config/theme.dart';
 import 'package:wegesha_client/widget/listTileWidget.dart';
 import 'package:wegesha_client/widget/Button.dart';
 
+import '../provider/payment.dart';
 import 'list_doctor.dart';
 
 class Appointment extends StatefulWidget {
@@ -58,6 +59,7 @@ class _AppointmentState extends State<Appointment> {
       star: '4.7',
     ),
   ];
+  Payment payment = new Payment();
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -228,7 +230,7 @@ class _AppointmentState extends State<Appointment> {
                     ),
                     SizedBox(height: 15),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
                           "Consultation ",
@@ -248,7 +250,7 @@ class _AppointmentState extends State<Appointment> {
                     ),
                     SizedBox(height: 10),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
                           "Admin Fee ",
@@ -268,7 +270,7 @@ class _AppointmentState extends State<Appointment> {
                     ),
                     SizedBox(height: size.height * 0.08),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
                           "Additional Discount ",
@@ -288,7 +290,7 @@ class _AppointmentState extends State<Appointment> {
                     ),
                     SizedBox(height: 15),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Text(
                           "Total ",
@@ -413,7 +415,9 @@ class _AppointmentState extends State<Appointment> {
                         title: "Booking",
                         height: 0.05,
                         width: 0.4,
-                        onTap: () {},
+                        onTap: () async {
+                          payment.paymentChapa();
+                        },
                         isElevated: true),
                   ),
                 ],

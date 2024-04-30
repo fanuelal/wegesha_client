@@ -27,11 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       floatingActionButton: FloatingActionButton(
-        backgroundColor:
-            isEmergencyMode ? ColorTheme.red : ColorTheme.primaryColor,
+        backgroundColor: isEmergencyMode ? ColorTheme.black : ColorTheme.red,
         foregroundColor: ColorTheme.white,
-        child: Icon(
-            isEmergencyMode ? Icons.health_and_safety : Icons.emergency_share),
+        child: Icon(isEmergencyMode
+            ? Symbols.emergency_share_off_rounded
+            : Icons.emergency_share),
         onPressed: () {
           setState(() {
             isEmergencyMode = !isEmergencyMode;
@@ -71,7 +71,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     width: size.width * 0.75,
                     padding: EdgeInsets.only(
                         left: size.width * 0.1,
-                        top: size.height * 0.1,
+                        top: size.height * 0.04,
                         bottom: size.height * 0.05),
                     child: Text(
                       "Find your desire healt solution",

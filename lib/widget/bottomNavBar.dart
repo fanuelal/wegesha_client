@@ -1,11 +1,14 @@
 import 'package:awesome_bottom_bar/widgets/inspired/inspired.dart';
 import 'package:flutter/material.dart';
 import 'package:awesome_bottom_bar/awesome_bottom_bar.dart';
+import 'package:material_symbols_icons/material_symbols_icons.dart';
 import 'package:wegesha_client/config/theme.dart';
 import 'package:wegesha_client/screens/home_screen.dart';
 import 'package:wegesha_client/screens/profile.dart';
-
+import 'package:material_symbols_icons/get.dart';
 import '../screens/appointment.dart';
+import '../screens/myAppointment.dart';
+import '../screens/result.dart';
 
 class BottomNav extends StatefulWidget {
   const BottomNav({super.key});
@@ -17,13 +20,13 @@ class BottomNav extends StatefulWidget {
 class _BottomNavState extends State<BottomNav> {
   List<TabItem> items = [
     const TabItem(
-      icon: Icons.home_rounded,
+      icon: Symbols.home_app_logo_rounded,
+    ),
+    TabItem(
+      icon: Symbols.biotech_rounded,
     ),
     const TabItem(
-      icon: Icons.document_scanner,
-    ),
-    const TabItem(
-      icon: Icons.calendar_month_rounded,
+      icon: Icons.event_available_rounded,
     ),
     const TabItem(
       icon: Icons.person_2_rounded,
@@ -33,6 +36,7 @@ class _BottomNavState extends State<BottomNav> {
 
   Widget BottomNav() {
     return BottomBarInspiredFancy(
+      iconSize: 23,
       items: items,
       backgroundColor: Colors.white,
       color: ColorTheme.gray,
@@ -47,8 +51,8 @@ class _BottomNavState extends State<BottomNav> {
 
   List<Widget> pages = [
     HomeScreen(),
-    const Appointment(),
-    const SafeArea(child: Text("Scheduled Histories")),
+    ResultsScreen(),
+    const MyAppointment(),
     const Profile(),
   ];
   @override

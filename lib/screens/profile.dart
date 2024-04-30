@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:wegesha_client/config/theme.dart';
 import 'package:material_symbols_icons/symbols.dart';
 
+import 'auth_page.dart';
+
 class Profile extends StatefulWidget {
   const Profile({super.key});
   static String route = '/profile';
@@ -162,10 +164,31 @@ class _ProfileState extends State<Profile> {
                                       children: [
                                         CircleAvatar(
                                           backgroundColor: ColorTheme.highLight,
-                                          child: Icon(
-                                            color: ColorTheme.primaryColor,
-                                            newicon[index],
-                                            size: 30,
+                                          child: IconButton(
+                                            onPressed: () {
+                                              switch (index) {
+                                                case 0:
+                                                  break;
+                                                case 1:
+                                                  break;
+                                                case 4:
+                                                  Navigator.of(context)
+                                                      .pushReplacement(
+                                                          MaterialPageRoute(
+                                                              builder:
+                                                                  (context) =>
+                                                                      AuthPage(
+                                                                        title:
+                                                                            "login",
+                                                                      )));
+                                                  break;
+                                              }
+                                            },
+                                            color: index == 4
+                                                ? ColorTheme.red
+                                                : ColorTheme.primaryColor,
+                                            icon: Icon(newicon[index]),
+                                            iconSize: 25,
                                           ),
                                         ),
                                       ],
@@ -175,9 +198,11 @@ class _ProfileState extends State<Profile> {
                                 Text(
                                   '${entries[index]}',
                                   style: GoogleFonts.inter(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.normal,
-                                  ),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                      color: index == 4
+                                          ? ColorTheme.red
+                                          : ColorTheme.black),
                                 ),
                                 const Expanded(
                                   child: Row(

@@ -10,7 +10,7 @@ class Auth extends ChangeNotifier {
   final url = Uri.parse('${Utils.baseUrl}/login');
   late UserModel userProfile;
   bool isLoggedIn = false;
-  late String accessToken;
+  static late String accessToken;
   Future<String> signIn(String email, String password) async {
     var message = "";
     if (email != null && password != null) {

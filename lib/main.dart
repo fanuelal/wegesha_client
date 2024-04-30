@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:wegesha_client/provider/emergencyProvider.dart';
 import 'package:wegesha_client/screens/auth_board.dart';
 import 'package:wegesha_client/screens/home_screen.dart';
 import 'package:wegesha_client/screens/profile.dart';
@@ -14,7 +15,8 @@ void main() {
     MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => Auth()),
-        ChangeNotifierProvider(create: (_) => UserProvider())
+        ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => EmergencyService())
       ],
       child: const MyApp(),
     ),
