@@ -7,7 +7,7 @@ import '../config/utils.dart';
 
 class UserProvider extends ChangeNotifier {
   Future<String> createUser(Map<String, dynamic> user) async {
-    String url = "${Utils.baseUrl}/user";
+    String url = "${Utils.baseUrl}/register";
 
     print(user);
     try {

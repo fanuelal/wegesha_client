@@ -1,22 +1,26 @@
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:uuid/uuid.dart';
+
+var uuid = Uuid();
 
 class Payment {
 //   var headers = {
 
 // };
-  void paymentChapa() async {
+  Future<String> paymentChapa() async {
     try {
+      String tx_ref = uuid.v4();
       final response = await http
           .post(Uri.parse('https://api.chapa.co/v1/transaction/initialize'),
               body: jsonEncode({
-                "amount": "100",
+                "amount": "650",
                 "currency": "ETB",
                 "email": "abebech_bekele@gmail.com",
                 "first_name": "Bilen",
                 "last_name": "Gizachew",
                 "phone_number": "0912345678",
-                "tx_ref": "chewatatest-6669",
+                "tx_ref": "chewatatest-${tx_ref}",
                 "callback_url":
                     "https://webhook.site/077164d6-29cb-40df-ba29-8a00e59a7e60",
                 "return_url": "https://www.google.com/",
@@ -25,17 +29,19 @@ class Payment {
               }),
               headers: {
             'Authorization':
-                'Bearer CHAPUBK_TEST-ZZM3EScW9m7M6EF1UXLPwCzKiAoPpwTT',
+                'Bearer CHASECK_TEST-aMjRDZOcTUmdrzdcut0ysjWZMRIMLn7H',
             'Content-Type': 'application/json'
           });
-
+      final decodedData = jsonDecode(response.body);
       if (response.statusCode == 200) {
-        print(response);
+        return decodedData['data']['checkout_url'];
       } else {
-        print(response.reasonPhrase);
+        print(decodedData);
+        return 'Failed To pay by chapa!';
       }
     } catch (error) {
       print(error);
+      return "Error durring payment connection!";
     }
   }
 }

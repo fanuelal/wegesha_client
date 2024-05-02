@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:wegesha_client/config/theme.dart';
 import 'package:material_symbols_icons/symbols.dart';
+import 'package:wegesha_client/model/user.dart';
+import 'package:wegesha_client/provider/auth.dart';
 
 import 'auth_page.dart';
 
@@ -17,23 +20,24 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   @override
+  final List<String> entries = <String>[
+    'My Save',
+    'Appointment',
+    'Payment',
+    'FAQs',
+    'Logout'
+  ];
+  final List<IconData> newicon = [
+    Symbols.favorite,
+    Symbols.schedule_rounded,
+    Symbols.account_balance_wallet_rounded,
+    Symbols.question_mark_rounded,
+    Symbols.logout_rounded,
+  ];
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final List<String> entries = <String>[
-      'My Save',
-      'Appointment',
-      'Payment',
-      'FAQs',
-      'Logout'
-    ];
-    // final List<int> colorCodes = <int>[600, 500, 300, 200, 100];
-    final List<IconData> newicon = [
-      Symbols.favorite,
-      Symbols.schedule_rounded,
-      Symbols.account_balance_wallet_rounded,
-      Symbols.question_mark_rounded,
-      Symbols.logout_rounded,
-    ];
+    final auth = Provider.of<Auth>(context);
+    final UserModel userProfile = auth.userProfile;
     return Scaffold(
         appBar: AppBar(
           elevation: 0,
@@ -51,12 +55,13 @@ class _ProfileState extends State<Profile> {
             color: ColorTheme.primaryColor,
           ),
           Positioned(
-            top: size.height * 0.08, // Adjust based on desired positioning
-            left: size.width * 0.4, // Center the content horizontally
+            top: size.height * 0.01, // Adjust based on desired positioning
+            left: size.width * 0.35, // Center the content horizontally
 
             child: RecentWidget(
-              "https://t3.ftcdn.net/jpg/02/60/04/08/360_F_260040863_fYxB1SnrzgJ9AOkcT0hoe7IEFtsPiHAD.jpg",
-              "Dr. Marcus",
+              userProfile.profilePicture,
+              "${userProfile.firstName} ${userProfile.lastName}",
+              size,
             ),
           ),
           Positioned(
@@ -172,6 +177,15 @@ class _ProfileState extends State<Profile> {
                                                 case 1:
                                                   break;
                                                 case 4:
+                                                  auth.accessToken = "";
+                                                  auth.userProfile = UserModel(
+                                                      email: "",
+                                                      firstName: "",
+                                                      lastName: "",
+                                                      phoneNumber: "",
+                                                      dateOfBirth: "",
+                                                      userType: "",
+                                                      isOnline: false);
                                                   Navigator.of(context)
                                                       .pushReplacement(
                                                           MaterialPageRoute(
@@ -228,13 +242,22 @@ class _ProfileState extends State<Profile> {
   }
 }
 
-Column RecentWidget(String image, String name) {
+Column RecentWidget(String image, String name, Size size) {
   return Column(
     children: [
-      CircleAvatar(
-        radius: 32,
-        backgroundImage: NetworkImage(image),
-      ),
+      image != ""
+          ? CircleAvatar(
+              radius: size.width * 0.15,
+              backgroundImage: NetworkImage(image),
+            )
+          : CircleAvatar(
+              radius: size.width * 0.15,
+              backgroundColor: ColorTheme.highLight,
+              child: Text(
+                name[0],
+                style: GoogleFonts.inter(fontSize: size.width * 0.2),
+              ),
+            ),
       Text(
         name,
         style: GoogleFonts.inter(

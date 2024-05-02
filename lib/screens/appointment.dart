@@ -1,9 +1,12 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wegesha_client/config/theme.dart';
+import 'package:wegesha_client/model/hcp.dart';
 import 'package:wegesha_client/widget/listTileWidget.dart';
 import 'package:wegesha_client/widget/Button.dart';
 
@@ -11,55 +14,31 @@ import '../provider/payment.dart';
 import 'list_doctor.dart';
 
 class Appointment extends StatefulWidget {
-  const Appointment({super.key});
-
+  Appointment({required this.hcp});
+  final HCP hcp;
   @override
   State<Appointment> createState() => _AppointmentState();
 }
 
 class _AppointmentState extends State<Appointment> {
-  List<Doctor> doctors = [
-    Doctor(
-      name: 'Dr.Yared Lemma',
-      photoUrl:
-          'https://www.regencymedicalcentre.com/wp-content/uploads/2018/03/black-doctor-bg-transparent-e1483021130255.png',
-      description: 'Orthopedist',
-      location: '200m away',
-      star: '4.7',
-    ),
-    Doctor(
-      name: 'Dr.Fanuel Alemaw',
-      photoUrl:
-          'https://www.meonly.live/wp-content/uploads/2018/04/doctor-pic13-600x459.png',
-      description: 'Charadiologist',
-      location: '500m away',
-      star: '4.7',
-    ),
-    Doctor(
-      name: 'Dr.Marina Elena',
-      photoUrl:
-          'https://madamefigaro.cy/wp-content/uploads/2021/08/doctor-pic-bg.png',
-      description: 'Orthopedist',
-      location: '200m away',
-      star: '4.7',
-    ),
-    Doctor(
-      name: 'Dr.Kidsit Mamaye ',
-      photoUrl: 'https://pluspng.com/img-png/png-woman-doctor--602.png',
-      description: 'Psychologist',
-      location: '800m away',
-      star: '4.7',
-    ),
-    Doctor(
-      name: 'Dr.Hermela Asamenew ',
-      photoUrl:
-          'https://i.pinimg.com/originals/7c/23/13/7c2313f8d49ff41e48982af55d5938f9.png',
-      description: 'Orthopedist',
-      location: '700m away',
-      star: '4.7',
-    ),
-  ];
+  bool isRedirecting = false;
   Payment payment = new Payment();
+  Future<void> _launchUrl(Uri _url) async {
+    if (await canLaunchUrl(_url)) {
+      await launchUrl(_url, mode: LaunchMode.inAppWebView);
+    } else {
+      AnimatedSnackBar snackBarEmergency = AnimatedSnackBar.material(
+          "Cann't launch this url can you try again please",
+          type: AnimatedSnackBarType.error,
+          mobileSnackBarPosition: MobileSnackBarPosition.top,
+          desktopSnackBarPosition: DesktopSnackBarPosition.topLeft,
+          snackBarStrategy: RemoveSnackBarStrategy(),
+          animationCurve: Easing.standardAccelerate);
+
+      snackBarEmergency.show(context);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -89,12 +68,12 @@ class _AppointmentState extends State<Appointment> {
             children: [
               ListTileWidget(
                 size: size,
-                name: "Dr Helen Abebe",
+                name: 'Dr. ${widget.hcp.firstname} ${widget.hcp.lastName}',
                 distance: "100KM",
-                filedStudy: "doctor",
+                filedStudy: widget.hcp.specialty,
                 rate: 4,
-                imageUrl:
-                    "https://i.pinimg.com/originals/7c/23/13/7c2313f8d49ff41e48982af55d5938f9.png",
+                hcp: widget.hcp,
+                imageUrl: widget.hcp.profilePicture,
               ),
               Container(
                 margin: EdgeInsets.only(
@@ -118,7 +97,7 @@ class _AppointmentState extends State<Appointment> {
                           "Change",
                           style: GoogleFonts.inter(
                             color: ColorTheme.gray,
-                            fontSize: 20,
+                            fontSize: 16,
                           ),
                         ),
                       ],
@@ -175,7 +154,7 @@ class _AppointmentState extends State<Appointment> {
                           "Change",
                           style: GoogleFonts.inter(
                             color: ColorTheme.gray,
-                            fontSize: 20,
+                            fontSize: 16,
                           ),
                         ),
                       ],
@@ -240,7 +219,7 @@ class _AppointmentState extends State<Appointment> {
                           ),
                         ),
                         Text(
-                          "\$60.00",
+                          "500.00 ETB",
                           style: GoogleFonts.inter(
                             color: ColorTheme.black,
                             fontSize: 18,
@@ -260,7 +239,7 @@ class _AppointmentState extends State<Appointment> {
                           ),
                         ),
                         Text(
-                          "\$30.00",
+                          "150.00 ETB",
                           style: GoogleFonts.inter(
                             color: ColorTheme.black,
                             fontSize: 18,
@@ -268,7 +247,7 @@ class _AppointmentState extends State<Appointment> {
                         ),
                       ],
                     ),
-                    SizedBox(height: size.height * 0.08),
+                    // SizedBox(height: size.height * 0.02),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
@@ -301,7 +280,7 @@ class _AppointmentState extends State<Appointment> {
                           ),
                         ),
                         Text(
-                          "\$90.00",
+                          "650.00 ETB",
                           style: GoogleFonts.inter(
                             color: const Color.fromARGB(255, 17, 122, 112),
                             fontSize: 18,
@@ -351,22 +330,15 @@ class _AppointmentState extends State<Appointment> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Padding(
-                            padding: EdgeInsets.only(left: 20.0),
-                            child: Text(
-                              "Chapa",
-                              style: GoogleFonts.inter(
-                                color: Colors.green,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w900,
-                              ),
-                            ),
-                          ),
+                              padding: EdgeInsets.only(left: 20.0),
+                              child: Image.network(
+                                  "https://banksethiopia.com/wp-content/uploads/chapa-1.png")),
                           Padding(
                             padding: EdgeInsets.only(right: 30.0),
                             child: Text(
                               "change",
                               style: GoogleFonts.inter(
-                                color: ColorTheme.black,
+                                color: ColorTheme.gray,
                                 fontSize: 17,
                               ),
                             ),
@@ -411,14 +383,29 @@ class _AppointmentState extends State<Appointment> {
                   Container(
                     margin: EdgeInsets.only(top: size.height * 0.02),
                     padding: EdgeInsets.only(right: 25.0),
-                    child: Button(
-                        title: "Booking",
-                        height: 0.05,
-                        width: 0.4,
-                        onTap: () async {
-                          payment.paymentChapa();
-                        },
-                        isElevated: true),
+                    child: isRedirecting
+                        ? Padding(
+                            padding: EdgeInsets.only(right: size.width * 0.2),
+                            child: CircularProgressIndicator(
+                                color: ColorTheme.primaryColor),
+                          )
+                        : Button(
+                            title: "Booking",
+                            height: 0.05,
+                            width: 0.4,
+                            onTap: () async {
+                              setState(() {
+                                isRedirecting = true;
+                              });
+                              String paymentLink = await payment.paymentChapa();
+                              setState(() {
+                                isRedirecting = false;
+                              });
+                              print(paymentLink);
+                              Uri _url = Uri.parse(paymentLink);
+                              await _launchUrl(_url);
+                            },
+                            isElevated: true),
                   ),
                 ],
               ),

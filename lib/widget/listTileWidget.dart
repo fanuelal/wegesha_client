@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:wegesha_client/model/hcp.dart';
 
 import '../screens/detail.dart';
 
@@ -10,9 +11,11 @@ class ListTileWidget extends StatelessWidget {
       required this.filedStudy,
       required this.distance,
       required this.rate,
+      required this.hcp,
       required this.imageUrl});
   final String name;
-  final int rate;
+  final double rate;
+  final HCP hcp;
   final String filedStudy;
   final String distance;
   final Size size;
@@ -22,7 +25,7 @@ class ListTileWidget extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Detail()));
+            .push(MaterialPageRoute(builder: (context) => Detail(hcp: hcp)));
       },
       child: Container(
         padding: EdgeInsets.all(8.0),
@@ -59,55 +62,42 @@ class ListTileWidget extends StatelessWidget {
               ),
               SizedBox(width: 20),
               Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+                  Container(
+                    width: size.width * 0.3,
+                    child: Text(
+                      name,
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
                     ),
                   ),
-                  Column(
-                    children: [
-                      Row(
-                        children: [
-                          Text(
-                            filedStudy,
-                            style: TextStyle(
-                              color: const Color(0xffA1A8B0),
-                              fontSize: 15,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 10),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Container(
-                          width: 50,
-                          height: 30,
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(4.0),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.star,
-                                size: 20,
-                                color: Color.fromARGB(255, 17, 122, 112),
-                              ),
-                              Text(
-                                rate.toString(),
-                                style: TextStyle(
-                                    color: Color.fromARGB(255, 17, 122, 112)),
-                              ),
-                            ],
-                          ),
+                  SizedBox(height: 5),
+                  Text(
+                    filedStudy,
+                    style: TextStyle(
+                      color: const Color(0xffA1A8B0),
+                      fontSize: 15,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Container(
+                    width: 150, // Set width as needed
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.star,
+                          size: 20,
+                          color: Color.fromARGB(255, 17, 122, 112),
                         ),
-                      ),
-                      SizedBox(height: 10),
-                      Row(children: [
+                        Text(
+                          rate.toString(),
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 17, 122, 112)),
+                        ),
+                        SizedBox(width: 10),
                         Icon(
                           Icons.location_on_rounded,
                           size: 20,
@@ -118,9 +108,9 @@ class ListTileWidget extends StatelessWidget {
                           style: TextStyle(
                             color: const Color(0xffA1A8B0),
                           ),
-                        )
-                      ])
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),

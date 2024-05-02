@@ -11,8 +11,8 @@ import '../screens/myAppointment.dart';
 import '../screens/result.dart';
 
 class BottomNav extends StatefulWidget {
-  const BottomNav({super.key});
-
+  const BottomNav({required this.accessToken});
+  final String accessToken;
   @override
   State<BottomNav> createState() => _BottomNavState();
 }
@@ -49,14 +49,14 @@ class _BottomNavState extends State<BottomNav> {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
   List<Widget> pages = [
-    HomeScreen(),
+    HomeScreen(accessToken: widget.accessToken,),
     ResultsScreen(),
     const MyAppointment(),
     const Profile(),
   ];
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNav(),
       body: pages[visit],

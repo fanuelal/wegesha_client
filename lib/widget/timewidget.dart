@@ -4,7 +4,9 @@ import 'package:google_fonts/google_fonts.dart';
 
 class Time extends StatefulWidget {
   final String time;
-  const Time({Key? key, required this.time}) : super(key: key);
+  final Function(String) onSelected;
+  const Time({Key? key, required this.time, required this.onSelected})
+      : super(key: key);
 
   @override
   State<Time> createState() => _TimeState();
@@ -22,6 +24,7 @@ class _TimeState extends State<Time> {
               ? Colors.transparent
               : ColorTheme.primaryColor; // Toggle the color on tap
         });
+        widget.onSelected(widget.time);
       },
       highlightColor: Colors.transparent, // Remove default highlight color
       splashColor: Colors.transparent,
@@ -54,7 +57,6 @@ class _TimeState extends State<Time> {
           ),
         ),
       ),
-      
     );
   }
 }

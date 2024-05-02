@@ -28,9 +28,9 @@ class HCP {
         specialty: json["specialty"],
         experienceYears: json["experienceYears"],
         rateCount: json["rateCount"],
-        rated: json["rated"],
-        firstname: ["firstname"],
-        lastName: ["lastName"],
+        rated: json["rated"] is double ? json["rated"] : 0.0,
+        firstname: json["firstName"],
+        lastName: json["lastName"],
         profilePicture: json["profilePicture"],
         description: json["description"]);
   }

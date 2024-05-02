@@ -6,6 +6,7 @@ import 'package:wegesha_client/provider/auth.dart';
 import 'package:wegesha_client/widget/bottomNavBar.dart';
 
 import '../config/theme.dart';
+import '../helper/alertFunctions.dart';
 import '../screens/auth_page.dart';
 import '../screens/home_screen.dart';
 import 'Button.dart';
@@ -46,7 +47,6 @@ class _SignInAuthState extends State<SignInAuth> {
             top: size.height * 0.05,
             right: size.width * 0.03,
             left: size.width * 0.03),
-
         child: InputFiled(
           controller: passwordController,
           prefixIcon: Icons.lock_outline,
@@ -73,7 +73,9 @@ class _SignInAuthState extends State<SignInAuth> {
       Container(
         margin: EdgeInsets.only(top: size.height * 0.05),
         child: isLogging
-            ?  CircularProgressIndicator(color: ColorTheme.primaryColor,)
+            ? CircularProgressIndicator(
+                color: ColorTheme.primaryColor,
+              )
             : Button(
                 title: "Login",
                 height: 0.07,
@@ -88,15 +90,14 @@ class _SignInAuthState extends State<SignInAuth> {
                     isLogging = false;
                   });
                   if (auth.isLoggedIn) {
-                    Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => BottomNav()));
+                    Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => BottomNav(
+                                  accessToken: auth.accessToken,
+                                )));
                   } else {
-                    SnackBar snackBar = SnackBar(
-                      content: Text(response),
-                      backgroundColor: Colors.red,
-                    );
-
-                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    errorAllertCaller(content: response, sec: 10, context: context);
                   }
                 },
                 isElevated: true),

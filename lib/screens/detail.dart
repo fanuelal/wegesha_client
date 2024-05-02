@@ -12,11 +12,13 @@ import 'package:wegesha_client/widget/datewidget.dart';
 import 'package:intl/intl.dart';
 import 'package:wegesha_client/widget/timewidget.dart';
 
+import '../helper/alertFunctions.dart';
+import '../model/hcp.dart';
 import '../widget/listTileWidget.dart';
 
 class Detail extends StatefulWidget {
-  const Detail({super.key});
-
+  Detail({required this.hcp});
+  final HCP hcp;
   @override
   State<Detail> createState() => _DetailState();
 }
@@ -35,16 +37,27 @@ class _DetailState extends State<Detail> {
     return timeList;
   }
 
-  Widget getTimeWidget() {
+  Widget getTimeWidget(Function(String) onSelected) {
     int i = 0;
     List<Widget> listTime = [];
     generateTimeList();
     while (timeList.length > i) {
       print(i);
-      listTime.add(Time(time: timeList[i]));
+      listTime.add(Time(
+        time: timeList[i],
+        onSelected: onSelected,
+      ));
       i += 1;
     }
     return Wrap(children: listTime);
+  }
+
+  String selectedTime = '';
+  void onSelected(String time) {
+    selectedTime = time;
+    print(selectedDate);
+    print(selectedDay);
+    print(selectedTime);
   }
 
   List<Map<String, dynamic>> getDatesAndDaysUntilEndOfMonth() {
@@ -72,6 +85,15 @@ class _DetailState extends State<Detail> {
     return datesAndDays;
   }
 
+  void _onselectedDateofMonth(String slicedDate, String slicedDay) {
+    setState(() {
+      selectedDate = slicedDate;
+      selectedDay = slicedDay;
+    });
+  }
+
+  String selectedDate = '';
+  String selectedDay = '';
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -106,12 +128,12 @@ class _DetailState extends State<Detail> {
           child: Column(children: [
             ListTileWidget(
               size: size,
-              name: "Dr Helen Abebe",
+              name: 'Dr. ${widget.hcp.firstname} ${widget.hcp.lastName}',
               distance: "100KM",
-              filedStudy: "doctor",
+              filedStudy: widget.hcp.specialty,
               rate: 4,
-              imageUrl:
-                  "https://i.pinimg.com/originals/7c/23/13/7c2313f8d49ff41e48982af55d5938f9.png",
+              hcp: widget.hcp,
+              imageUrl: widget.hcp.profilePicture,
             ),
             Container(
                 margin: EdgeInsets.only(
@@ -132,17 +154,17 @@ class _DetailState extends State<Detail> {
                 child: RichText(
                   text: TextSpan(
                       text:
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam... ",
+                          "Dr. ${widget.hcp.firstname} ${widget.hcp.lastName} is a dedicated and experienced healthcare professional specializing in ${widget.hcp.experienceYears}.  They are passionate about providing comprehensive and compassionate care to their patients, focusing on ${widget.hcp.specialty}. ",
                       style: GoogleFonts.inter(
                         color: ColorTheme.gray,
-                        fontSize: 12,
+                        fontSize: 15,
                       ),
                       children: [
                         TextSpan(
                           text: 'Read more',
                           style: GoogleFonts.inter(
                             color: ColorTheme.primaryColor,
-                            fontSize: 12,
+                            fontSize: 15,
                             fontWeight: FontWeight.bold,
                           ),
                           recognizer: TapGestureRecognizer()..onTap = () {},
@@ -158,12 +180,14 @@ class _DetailState extends State<Detail> {
                   final itemsList = getDatesAndDaysUntilEndOfMonth();
                   final slicedDate = itemsList[index]['date'].split("-")[2];
                   final slicedDay = itemsList[index]['day'].substring(0, 3);
-
-                  return DateOfMonth(date: slicedDate, day: slicedDay);
+                  return DateOfMonth(
+                      date: slicedDate,
+                      day: slicedDay,
+                      onSelected: _onselectedDateofMonth);
                 },
               ),
             ),
-            getTimeWidget(),
+            getTimeWidget(onSelected),
             Container(
               margin: EdgeInsets.only(
                   top: size.height * 0.02, bottom: size.height * 0.02),
@@ -172,8 +196,17 @@ class _DetailState extends State<Detail> {
                   height: 0.07,
                   width: 0.75,
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => Appointment()));
+                    if (selectedDate != '' || selectedDay != '') {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => Appointment(
+                                    hcp: widget.hcp,
+                                  )));
+                    } else {
+                      errorAllertCaller(
+                          content: "Scheduled Date and Timer are required!", sec: 20, context: context);
+                    }
                   },
                   isElevated: true),
             ),

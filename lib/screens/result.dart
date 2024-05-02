@@ -20,6 +20,12 @@ class ResultsScreen extends StatelessWidget {
             ),
             SizedBox(height: 16.0),
             _buildResultCard(
+              title: 'Medicine prescription',
+              value: 'No prescription',
+              icon: Icons.medication_rounded,
+            ),
+            SizedBox(height: 16.0),
+            _buildResultCard(
               title: 'Heart Rate',
               value: '78 bpm',
               icon: Icons.favorite,

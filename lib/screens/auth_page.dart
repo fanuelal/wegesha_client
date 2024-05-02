@@ -49,7 +49,7 @@ class _AuthPageState extends State<AuthPage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          widget.title,
+          isLoginTitle ? 'Sign In' : 'Sign Up',
           style: GoogleFonts.inter(
             color: ColorTheme.black,
             fontSize: 18,

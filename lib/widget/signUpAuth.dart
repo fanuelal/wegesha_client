@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:wegesha_client/provider/user.provider.dart';
 import '../config/theme.dart';
+import '../helper/alertFunctions.dart';
 import '../screens/auth_page.dart';
 import '../widget/Button.dart';
 import '../widget/input_filed.dart';
@@ -203,6 +204,7 @@ class _SignUpAuthState extends State<SignUpAuth> {
                           emailSignUp != null ||
                           passwordSignUp != null ||
                           pickedDate != null) {
+                        print(pickedDate!.toIso8601String());
                         Map<String, dynamic> jsonCreate = {
                           "firstName": firstName.text,
                           "lastName": lastName.text,
@@ -221,8 +223,7 @@ class _SignUpAuthState extends State<SignUpAuth> {
                         if (response == 'user successfully created') {
                           snackBarColor = Colors.green;
                         }
-                        SnackBar snackBar = SnackBar(content: Text(response));
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        successAllertCaller(content: response, sec: 10);
 
                         Navigator.push(
                             context,
@@ -231,11 +232,12 @@ class _SignUpAuthState extends State<SignUpAuth> {
                                       title: 'Login',
                                     )));
                       } else {
-                        SnackBar snackBar = SnackBar(
-                          content: Text("All fileds Required"),
-                          backgroundColor: Colors.red,
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                        errorAllertCaller(
+                            content: "All input fields required",
+                            sec: 20,
+                            context: context);
+
+                        // ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       }
                     },
                     isElevated: true),
@@ -259,7 +261,6 @@ class _SignUpAuthState extends State<SignUpAuth> {
                   ),
                   recognizer: TapGestureRecognizer()
                     ..onTap = () {
-                      // Add your sign up logic here
                       Navigator.push(
                           context,
                           MaterialPageRoute(

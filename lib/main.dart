@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:wegesha_client/provider/emergencyProvider.dart';
+import 'package:wegesha_client/provider/hcp_provider.dart';
 import 'package:wegesha_client/screens/auth_board.dart';
 import 'package:wegesha_client/screens/home_screen.dart';
 import 'package:wegesha_client/screens/profile.dart';
@@ -16,6 +17,8 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => Auth()),
         ChangeNotifierProvider(create: (_) => UserProvider()),
+        ChangeNotifierProvider(create: (_) => EmergencyService()),
+        ChangeNotifierProvider(create: (_) => Hcp_Provider()),
         ChangeNotifierProvider(create: (_) => EmergencyService())
       ],
       child: const MyApp(),
@@ -35,7 +38,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-        HomeScreen.route:(context) => HomeScreen(),
+        // HomeScreen.route:(context) => HomeScreen(),
         Profile.route:(context) => const Profile(),
       },
       home: const AuthPage(

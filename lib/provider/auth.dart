@@ -10,7 +10,7 @@ class Auth extends ChangeNotifier {
   final url = Uri.parse('${Utils.baseUrl}/login');
   late UserModel userProfile;
   bool isLoggedIn = false;
-  static late String accessToken;
+  late String accessToken;
   Future<String> signIn(String email, String password) async {
     var message = "";
     if (email != null && password != null) {
@@ -32,9 +32,8 @@ class Auth extends ChangeNotifier {
         final decodedData = jsonDecode(data);
         if (response.statusCode == 200) {
           userProfile = UserModel.fromJson(decodedData['data']);
-          print(userProfile);
           isLoggedIn = true;
-          accessToken = decodedData['accessToken'];
+          accessToken = decodedData['data']['accessToken'];
           notifyListeners();
           return decodedData['message'];
         } else {
@@ -47,7 +46,7 @@ class Auth extends ChangeNotifier {
       } catch (error) {
         print(error);
         // throw (error);
-        return "Connection Failed";
+        return "Connection Failed ${error}";
       }
     } else {
       return "All input are required";
