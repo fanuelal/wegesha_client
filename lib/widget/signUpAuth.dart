@@ -223,7 +223,7 @@ class _SignUpAuthState extends State<SignUpAuth> {
                         if (response == 'user successfully created') {
                           snackBarColor = Colors.green;
                         }
-                        successAllertCaller(content: response, sec: 10);
+                        successAllertCaller(content: response, sec: 10, context: context);
 
                         Navigator.push(
                             context,

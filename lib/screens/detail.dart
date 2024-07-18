@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:wegesha_client/config/theme.dart';
 import 'package:wegesha_client/screens/appointment.dart';
@@ -136,6 +137,23 @@ class _DetailState extends State<Detail> {
               imageUrl: widget.hcp.profilePicture,
             ),
             Container(
+              child: RatingBar.builder(
+                 initialRating: widget.hcp.rated,
+                 minRating: 1,
+                 direction: Axis.horizontal,
+                 allowHalfRating: true,
+                 itemCount: 5,
+                 itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                 itemBuilder: (context, _) => Icon(
+                   Icons.star,
+                   color: Colors.amber,
+                 ),
+                 onRatingUpdate: (rating) {
+                   print(rating);
+                 },
+              ),
+            ),
+            Container(
                 margin: EdgeInsets.only(
                     top: size.height * 0.03, left: size.width * 0.04),
                 alignment: Alignment.topLeft,
@@ -202,6 +220,9 @@ class _DetailState extends State<Detail> {
                           MaterialPageRoute(
                               builder: (context) => Appointment(
                                     hcp: widget.hcp,
+                                    selectedDate: selectedDate,
+                                    selectedDay: selectedDay,
+                                    selectedTime: selectedTime
                                   )));
                     } else {
                       errorAllertCaller(

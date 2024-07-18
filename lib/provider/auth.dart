@@ -15,6 +15,8 @@ class Auth extends ChangeNotifier {
     var message = "";
     if (email != null && password != null) {
       try {
+  print('${Utils.baseUrl}/login');
+
         var response = await http
             .post(
           url,
@@ -30,6 +32,7 @@ class Auth extends ChangeNotifier {
         );
         final data = response.body;
         final decodedData = jsonDecode(data);
+        print(decodedData);
         if (response.statusCode == 200) {
           userProfile = UserModel.fromJson(decodedData['data']);
           isLoggedIn = true;

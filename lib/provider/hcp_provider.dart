@@ -100,13 +100,11 @@ class Hcp_Provider extends ChangeNotifier {
     });
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
-      print(data);
      List<HCP> newHcpList = [];
 if (data['data'] != null && data['data'].isNotEmpty) {
   List<dynamic> dynamicList = data['data'];
   newHcpList = dynamicList.map((json) => HCP.fromJson(json)).toList();
 }
-
       hpcs.addAll(newHcpList);
       return hpcs;
     } else {

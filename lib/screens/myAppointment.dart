@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:wegesha_client/config/theme.dart';
 import '../widget/ScheduledHPC.dart';
 
@@ -50,7 +51,8 @@ class _MyAppointmentState extends State<MyAppointment> {
                   date: "02/03/24",
                   time: "2:00 PM",
                   status: "Confirmed",
-                  fieldType: "Chardiologyst"),
+                  fieldType: "Chardiologyst",
+                  location: LatLng(11.2, 50.30),),
               ScheduledHCP(
                   size: size,
                   imageUrl:
@@ -59,7 +61,8 @@ class _MyAppointmentState extends State<MyAppointment> {
                   date: "03/07/24",
                   time: "8:00 PM",
                   status: "cancled",
-                  fieldType: "Chardiologyst"),
+                  fieldType: "Chardiologyst",
+                  location: LatLng(11.2, 50.30)),
               ScheduledHCP(
                   size: size,
                   imageUrl:
@@ -68,7 +71,8 @@ class _MyAppointmentState extends State<MyAppointment> {
                   date: "02/03/24",
                   time: "2:00 PM",
                   status: "Upcomming",
-                  fieldType: "Chardiologyst")
+                  fieldType: "Chardiologyst",
+                  location: LatLng(11.2, 50.30))
             ]),
           ),
         ),

@@ -31,6 +31,7 @@ class _AlertState extends State<Alert> {
     iconData = Icons.error;
      iconColor = const Color(0xffFF5C5C);
   }
+  
   showDialog(
     context: context,
     builder: (BuildContext context) {

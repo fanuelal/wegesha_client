@@ -19,15 +19,14 @@ void errorAllertCaller(
   });
 }
 
-void successAllertCaller({required String content, int sec = 30}) async {
-  print(content);
+void successAllertCaller({required String content, int sec = 30, required BuildContext context}) async {
   AnimatedSnackBar snackBarEmergency = AnimatedSnackBar.material(content,
       type: AnimatedSnackBarType.success,
       mobileSnackBarPosition: MobileSnackBarPosition.top,
       desktopSnackBarPosition: DesktopSnackBarPosition.topLeft,
       snackBarStrategy: RemoveSnackBarStrategy(),
       animationCurve: Easing.standardAccelerate);
-
+  snackBarEmergency.show(context);
   Future.delayed(const Duration(seconds: 60), () {
     snackBarEmergency.remove();
   });

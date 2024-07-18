@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:wegesha_client/config/theme.dart';
+import 'package:wegesha_client/helper/alertFunctions.dart';
 import 'package:wegesha_client/model/emergency.dart';
 import 'package:wegesha_client/provider/auth.dart';
 import 'package:wegesha_client/provider/emergencyProvider.dart';
@@ -94,60 +95,65 @@ class _HomeScreenState extends State<HomeScreen> {
 
           bool isLocationServiceEnabled =
               await Geolocator.isLocationServiceEnabled();
-
-          if (isLocationServiceEnabled) {
-            setState(() {
-              emergencyBroadCasting = true;
-            });
-            Position position = await Geolocator.getCurrentPosition(
-                desiredAccuracy: LocationAccuracy.high);
-            Emergency emergency = Emergency(
-              type: 'Healthcare',
-              location: '${position.latitude}:${position.longitude}',
-              userId: auth.userProfile.id,
-              acceptedBy: auth.userProfile.id,
-              status: "pending",
-            );
-            bool published = await emergencyService.createEmergency(
-                emergency, auth.accessToken);
-            setState(() {
-              emergencyBroadCasting = false;
-            });
-            if (published) {
-              contentAlert = 'Your emergency broadcasted to doctors';
-              snackSafe.show(context);
-
-              Future.delayed(const Duration(seconds: 60), () {
-                snackSafe.remove();
+          if (isEmergencyMode) {
+            if (isLocationServiceEnabled) {
+              setState(() {
+                emergencyBroadCasting = true;
               });
+              Position position = await Geolocator.getCurrentPosition(
+                  desiredAccuracy: LocationAccuracy.high);
+              Emergency emergency = Emergency(
+                type: 'Healthcare',
+                location: '${position.latitude}:${position.longitude}',
+                userId: auth.userProfile.id,
+                acceptedBy: auth.userProfile.id,
+                status: "pending",
+              );
+              bool published = await emergencyService.createEmergency(
+                  emergency, auth.accessToken);
+              setState(() {
+                emergencyBroadCasting = false;
+              });
+              if (published) {
+                contentAlert = 'Your emergency broadcasted to doctors';
+                snackSafe.show(context);
+
+                Future.delayed(const Duration(seconds: 60), () {
+                  snackSafe.remove();
+                });
+              }
+            } else {
+              LocationPermission permission =
+                  await Geolocator.checkPermission();
+              if (permission == LocationPermission.denied) {
+                permission = await Geolocator.requestPermission();
+                if (permission == LocationPermission.denied) {
+                  contentAlert = "Location Permissions are denined";
+                  errorAllertCaller(
+                      content: contentAlert, sec: 20, context: context);
+                }
+                if (permission == LocationPermission.deniedForever) {
+                  contentAlert =
+                      "Location Permissions are denined forever can't request again!";
+                  errorAllertCaller(
+                      content: contentAlert, sec: 20, context: context);
+                }
+                bool isLocationServiceEnabled =
+                    await Geolocator.isLocationServiceEnabled();
+                if (!isLocationServiceEnabled) {
+                  contentAlert = "Please enable location service!";
+                  errorAllertCaller(
+                      content: contentAlert, sec: 20, context: context);
+                  print(contentAlert);
+                } else {
+                  Position position = await Geolocator.getCurrentPosition(
+                      desiredAccuracy: LocationAccuracy.high);
+                }
+              }
             }
           } else {
-            LocationPermission permission = await Geolocator.checkPermission();
-            if (permission == LocationPermission.denied) {
-              permission = await Geolocator.requestPermission();
-              if (permission == LocationPermission.denied) {
-                contentAlert = "Location Permissions are denined";
-                snackBarEmergency.show(context);
-              }
-              if (permission == LocationPermission.deniedForever) {
-                contentAlert =
-                    "Location Permissions are denined forever can't request again!";
-                snackBarEmergency.show(context);
-              }
-              bool isLocationServiceEnabled =
-                  await Geolocator.isLocationServiceEnabled();
-              if (!isLocationServiceEnabled) {
-                contentAlert = "Please enable location service!";
-                // snackBarEmergency.show(context);
-                print(contentAlert);
-              } else {
-                Position position = await Geolocator.getCurrentPosition(
-                    desiredAccuracy: LocationAccuracy.high);
-                contentAlert =
-                    "location: ${position.altitude}: ${position.latitude}";
-                print(contentAlert);
-              }
-            }
+            String contentAlert = 'You are now Safe mode!';
+            successAllertCaller(content: contentAlert, sec: 20, context: context);
           }
           if (isEmergencyMode) {
             contentAlert = "You are now in Emergency State!";

@@ -14,8 +14,15 @@ import '../provider/payment.dart';
 import 'list_doctor.dart';
 
 class Appointment extends StatefulWidget {
-  Appointment({required this.hcp});
+  Appointment(
+      {required this.hcp,
+      required this.selectedDate,
+      required this.selectedDay,
+      required this.selectedTime});
   final HCP hcp;
+  final String selectedDate;
+  final String selectedDay;
+  final String selectedTime;
   @override
   State<Appointment> createState() => _AppointmentState();
 }
@@ -114,7 +121,7 @@ class _AppointmentState extends State<Appointment> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "Wednesday, Jun 23, 2021 | 10:00 AM",
+                          "${widget.selectedDay}, May ${widget.selectedDate}, 2024 | ${widget.selectedTime}",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: size.width * 0.045,
