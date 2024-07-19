@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:wegesha_client/provider/auth.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'dart:convert';
 import 'dart:io';
@@ -7,7 +9,8 @@ import 'package:crypto/crypto.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 class PrebuiltCallPage extends StatefulWidget {
-  const PrebuiltCallPage({Key? key}) : super(key: key);
+  final String callId;
+  const PrebuiltCallPage({required this.callId});
 
   @override
   State<StatefulWidget> createState() => PrebuiltCallPageState();
@@ -27,14 +30,19 @@ class PrebuiltCallPageState extends State<PrebuiltCallPage> {
       });
     });
   }
-  
 
-  final config = ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
-    ..turnOnCameraWhenJoining = true
-    ..turnOnMicrophoneWhenJoining = true;
+  ZegoUIKitPrebuiltCallConfig config =
+      ZegoUIKitPrebuiltCallConfig.oneOnOneVideoCall()
+        ..chatView = ZegoCallInRoomChatViewConfig(
+          itemBuilder: (context, message, extraInfo) => Text(message.message),
+        )
+        ..turnOnCameraWhenJoining = true
+        ..turnOnMicrophoneWhenJoining = true;
 
   @override
   Widget build(BuildContext context) {
+    final userProfile = Provider.of<Auth>(context).userProfile;
+    print(userProfile.id);
     return Scaffold(
       body: isLoading
           ? const Center(child: CircularProgressIndicator())
@@ -43,9 +51,9 @@ class PrebuiltCallPageState extends State<PrebuiltCallPage> {
                 appID: 1278021714,
                 appSign:
                     "ccafe86f42e6de1f616ab905b351b02e0e7f69a896c0c299c3699f3ef741421c",
-                userID: id!,
-                userName: "$id test user",
-                callID: "call_id_${DateTime.now().millisecondsSinceEpoch}",
+                userID: userProfile.id,
+                userName: "${userProfile.firstName} ${userProfile.lastName}",
+                callID: "${widget.callId}",
                 config: config,
               ),
             ),

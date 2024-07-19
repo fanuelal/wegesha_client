@@ -177,15 +177,7 @@ class _ProfileState extends State<Profile> {
                                                 case 1:
                                                   break;
                                                 case 4:
-                                                  auth.accessToken = "";
-                                                  auth.userProfile = UserModel(
-                                                      email: "",
-                                                      firstName: "",
-                                                      lastName: "",
-                                                      phoneNumber: "",
-                                                      dateOfBirth: "",
-                                                      userType: "",
-                                                      isOnline: false);
+                                                  auth.logout();
                                                   Navigator.of(context)
                                                       .pushReplacement(
                                                           MaterialPageRoute(

@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
-import "package:shimmer/shimmer.dart";
+import 'package:shimmer/shimmer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:wegesha_client/screens/callScreen.dart';
 
@@ -26,10 +26,13 @@ class _MapScreenState extends State<MapScreen> {
   Set<Polyline> _polylines = {};
   final String _googleApiKey = 'AIzaSyCCT6MWoYFOymnKTRMBmkl6QIzRdWkEPKI';
   bool _isMapLoading = true;
+  BitmapDescriptor? _currentMarkerIcon;
+  BitmapDescriptor? _destinationMarkerIcon;
 
   @override
   void initState() {
     super.initState();
+    _loadCustomMarkerIcons();
     _getCurrentLocation();
   }
 
@@ -39,9 +42,19 @@ class _MapScreenState extends State<MapScreen> {
     super.dispose();
   }
 
+  Future<void> _loadCustomMarkerIcons() async {
+    _currentMarkerIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(48, 48)),
+      'assets/client.png',
+    );
+    _destinationMarkerIcon = await BitmapDescriptor.fromAssetImage(
+      const ImageConfiguration(size: Size(38, 38)),
+      'assets/ambulance.png',
+    );
+    setState(() {});
+  }
+
   void _getCurrentLocation() async {
-    // Position position = await Geolocator.getCurrentPosition(
-    //     desiredAccuracy: LocationAccuracy.high);
     var status = await Permission.location.request();
 
     if (status.isGranted) {
@@ -55,7 +68,6 @@ class _MapScreenState extends State<MapScreen> {
 
       _getPolyline();
     } else if (status.isDenied || status.isPermanentlyDenied) {
-      // Handle the case when permission is denied
       print("Location permission denied");
     }
   }
@@ -76,7 +88,7 @@ class _MapScreenState extends State<MapScreen> {
 
       setState(() {
         _polylines.add(Polyline(
-          polylineId: PolylineId('polyline'),
+          polylineId: const PolylineId('polyline'),
           visible: true,
           points: _polylineCoordinates,
           width: 4,
@@ -116,12 +128,12 @@ class _MapScreenState extends State<MapScreen> {
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios),
+            icon: const Icon(Icons.arrow_back_ios),
             onPressed: () {
               Navigator.of(context).pop();
             },
           ),
-          title: const Text("Ambulance"),
+          title: const Text("HCP Location"),
           elevation: 0,
         ),
         body: Stack(
@@ -134,16 +146,20 @@ class _MapScreenState extends State<MapScreen> {
               onMapCreated: _onMapCreated,
               polylines: _polylines,
               markers: {
-                Marker(
-                  markerId: MarkerId('origin'),
-                  position: _currentPosition,
-                  infoWindow: InfoWindow(title: 'Origin'),
-                ),
-                Marker(
-                  markerId: MarkerId('destination'),
-                  position: _destination,
-                  infoWindow: InfoWindow(title: 'Destination'),
-                ),
+                if (_currentMarkerIcon != null)
+                  Marker(
+                    markerId: const MarkerId('origin'),
+                    position: _currentPosition,
+                    icon: _currentMarkerIcon!,
+                    infoWindow: const InfoWindow(title: 'Origin'),
+                  ),
+                if (_destinationMarkerIcon != null)
+                  Marker(
+                    markerId: const MarkerId('destination'),
+                    position: _destination,
+                    icon: _destinationMarkerIcon!,
+                    infoWindow: const InfoWindow(title: 'Destination'),
+                  ),
               },
             ),
             if (_isMapLoading)
@@ -162,12 +178,12 @@ class _MapScreenState extends State<MapScreen> {
                 padding: const EdgeInsets.only(bottom: 16.0, right: 16.0),
                 child: FloatingActionButton(
                   backgroundColor: ColorTheme.primaryColor,
+                  foregroundColor: ColorTheme.white,
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => PrebuiltCallPage()
-                            )
-                            );
-      
+                        builder: (context) => PrebuiltCallPage(
+                              callId: 'videoCall_00wegesha',
+                            )));
                   },
                   child: const Icon(Icons.video_call),
                 ),

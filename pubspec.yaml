@@ -60,6 +60,7 @@ dependencies:
   device_info_plus: ^9.1.2
   crypto: ^3.0.3
   zego_uikit: ^2.22.2
+  shared_preferences: ^2.2.3
 
 dev_dependencies:
   flutter_test:
@@ -90,7 +91,8 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    # - images/a_dot_ham.jpeg
+    - assets/ambulance.png
+    - assets/client.png
     - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
