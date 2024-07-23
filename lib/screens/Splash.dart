@@ -33,8 +33,15 @@ class _SplashState extends State<Splash> with SingleTickerProviderStateMixin {
     _controller.forward().then((_) {
       Timer(
           const Duration(milliseconds: 1500),
-          () => Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => OnBoarding())));
+          () {
+          if (mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => OnBoarding()),
+          );
+        }
+          } 
+              );
     });
   }
 

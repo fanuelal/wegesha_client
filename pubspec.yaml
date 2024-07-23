@@ -61,6 +61,7 @@ dependencies:
   crypto: ^3.0.3
   zego_uikit: ^2.22.2
   shared_preferences: ^2.2.3
+  dash_bubble: ^2.0.0
 
 dev_dependencies:
   flutter_test:

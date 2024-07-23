@@ -59,7 +59,20 @@ class Auth extends ChangeNotifier {
 
   Future<void> getTokenLocally() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    DateTime timeStamp;
     accessToken = prefs.getString('authToken') ?? '';
+
+    if (accessToken.isNotEmpty) {
+      timeStamp = DateTime.parse(prefs.getString('timeStamp')!);
+      Duration difference = DateTime.now().difference(timeStamp);
+            if (difference.inHours >= 1) {
+        await prefs.remove('authToken');
+        await prefs.remove('timeStamp');
+        print('Shared preferences removed due to inactivity.');
+      } else {
+        print('User is still within the allowed time frame.');
+      }
+    }
     final userProfileString = prefs.getString('userProfile');
     if (userProfileString != null) {
       userProfile = UserModel.fromJson(jsonDecode(userProfileString));
@@ -73,6 +86,7 @@ class Auth extends ChangeNotifier {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('authToken', accessToken);
     await prefs.setString('userProfile', jsonEncode(userProfile.toJson()));
+    await prefs.setString('timeStamp', DateTime.now().toIso8601String());
   }
 
   void logout() async {

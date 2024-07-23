@@ -4,23 +4,31 @@ import 'package:animated_snack_bar/animated_snack_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:wegesha_client/config/theme.dart';
+import 'package:wegesha_client/model/appointment.dart';
 import 'package:wegesha_client/model/hcp.dart';
+import 'package:wegesha_client/provider/auth.dart';
 import 'package:wegesha_client/widget/listTileWidget.dart';
 import 'package:wegesha_client/widget/Button.dart';
+import 'package:geolocator/geolocator.dart';
 
+import '../provider/appointment.dart';
 import '../provider/payment.dart';
 import 'list_doctor.dart';
 
 class Appointment extends StatefulWidget {
   Appointment(
-      {required this.hcp,
+      {
+      required this.id,
+      required this.hcp,
       required this.selectedDate,
       required this.selectedDay,
       required this.selectedTime});
+  final String id;
   final HCP hcp;
-  final String selectedDate;
+  final DateTime selectedDate;
   final String selectedDay;
   final String selectedTime;
   @override
@@ -30,12 +38,13 @@ class Appointment extends StatefulWidget {
 class _AppointmentState extends State<Appointment> {
   bool isRedirecting = false;
   Payment payment = new Payment();
+
   Future<void> _launchUrl(Uri _url) async {
     if (await canLaunchUrl(_url)) {
       await launchUrl(_url, mode: LaunchMode.inAppWebView);
     } else {
       AnimatedSnackBar snackBarEmergency = AnimatedSnackBar.material(
-          "Cann't launch this url can you try again please",
+          "Cannot launch this URL, please try again.",
           type: AnimatedSnackBarType.error,
           mobileSnackBarPosition: MobileSnackBarPosition.top,
           desktopSnackBarPosition: DesktopSnackBarPosition.topLeft,
@@ -46,9 +55,37 @@ class _AppointmentState extends State<Appointment> {
     }
   }
 
+  Future<Position?> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      await Geolocator.openLocationSettings();
+      return null;
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return null;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      return null;
+    }
+
+    return await Geolocator.getCurrentPosition();
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final auth = Provider.of<Auth>(context);
+    final userProfile = auth.userProfile;
+    final appointmentProvider = Provider.of<AppointmentService>(context);
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -121,7 +158,7 @@ class _AppointmentState extends State<Appointment> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "${widget.selectedDay}, May ${widget.selectedDate}, 2024 | ${widget.selectedTime}",
+                          "${widget.selectedDay}, Jul ${widget.selectedDate}, 2024 | ${widget.selectedTime}",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: size.width * 0.045,
@@ -178,7 +215,7 @@ class _AppointmentState extends State<Appointment> {
                         ),
                         SizedBox(width: 20),
                         Text(
-                          "Chest pain",
+                          "Some Note",
                           style: TextStyle(
                             color: Colors.black,
                             fontSize: 18,
@@ -226,7 +263,7 @@ class _AppointmentState extends State<Appointment> {
                           ),
                         ),
                         Text(
-                          "500.00 ETB",
+                          "250.00 ETB",
                           style: GoogleFonts.inter(
                             color: ColorTheme.black,
                             fontSize: 18,
@@ -287,7 +324,7 @@ class _AppointmentState extends State<Appointment> {
                           ),
                         ),
                         Text(
-                          "650.00 ETB",
+                          "250.00 ETB",
                           style: GoogleFonts.inter(
                             color: const Color.fromARGB(255, 17, 122, 112),
                             fontSize: 18,
@@ -376,7 +413,7 @@ class _AppointmentState extends State<Appointment> {
                       Padding(
                         padding: EdgeInsets.only(left: 20.0),
                         child: Text(
-                          "\$90.00",
+                          "250.00 ETB",
                           style: GoogleFonts.inter(
                             color: ColorTheme.black,
                             fontSize: 18,
@@ -404,7 +441,33 @@ class _AppointmentState extends State<Appointment> {
                               setState(() {
                                 isRedirecting = true;
                               });
-                              String paymentLink = await payment.paymentChapa();
+
+                              Position? position = await _determinePosition();
+                              if (position == null) {
+                                setState(() {
+                                  isRedirecting = false;
+                                });
+                                AnimatedSnackBar snackBar =
+                                    AnimatedSnackBar.material(
+                                  "Location permission denied or location services are disabled.",
+                                  type: AnimatedSnackBarType.error,
+                                  mobileSnackBarPosition:
+                                      MobileSnackBarPosition.top,
+                                  desktopSnackBarPosition:
+                                      DesktopSnackBarPosition.topLeft,
+                                  snackBarStrategy: RemoveSnackBarStrategy(),
+                                  animationCurve: Easing.standardAccelerate,
+                                );
+                                snackBar.show(context);
+                                return;
+                              }
+                              String latLong = "${position.latitude},${position.longitude}";
+                              AppointmentModel appointment = AppointmentModel(imageUrl: widget.hcp.profilePicture, name: '${widget.hcp.firstname} ${widget.hcp.lastName}', date: widget.selectedDate, time: widget.selectedTime, status: 'pending', location: latLong, fieldType: 'no Note', doctorId: widget.id, patientId: auth.userProfile.id);
+                              // Create appointment
+                            await appointmentProvider.createAppointment(appointment, auth.accessToken);
+
+                              String paymentLink =
+                                  await payment.paymentChapa(auth.userProfile);
                               setState(() {
                                 isRedirecting = false;
                               });

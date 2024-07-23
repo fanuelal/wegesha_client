@@ -8,6 +8,7 @@ import 'package:wegesha_client/screens/home_screen.dart';
 import 'package:wegesha_client/screens/profile.dart';
 import 'package:wegesha_client/widget/bottomNavBar.dart';
 import './provider/auth.dart';
+import 'provider/appointment.dart';
 import 'provider/user.provider.dart';
 import 'screens/auth_page.dart';
 import 'screens/mapScreen.dart';
@@ -20,6 +21,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(create: (_) => EmergencyService()),
         ChangeNotifierProvider(create: (_) => Hcp_Provider()),
+        ChangeNotifierProvider(create: (_) => AppointmentService())
       ],
       child: const MyApp(),
     ),
@@ -59,14 +61,18 @@ class _AuthOrHomeState extends State<AuthOrHome> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      _isLoading = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _checkAuth();
     });
-    _checkAuth();
   }
 
   Future<void> _checkAuth() async {
+    setState(() {
+      _isLoading = true;
+    });
+
     await Provider.of<Auth>(context, listen: false).getTokenLocally();
+
     setState(() {
       _isLoading = false;
     });
@@ -75,9 +81,7 @@ class _AuthOrHomeState extends State<AuthOrHome> {
   @override
   Widget build(BuildContext context) {
     final auth = Provider.of<Auth>(context);
-    print("_isloading is running $_isLoading");
     if (_isLoading) {
-      print("splash screen popup");
       return const Splash();
     } else {
       return auth.accessToken.isEmpty

@@ -1,16 +1,14 @@
-// import 'dart:ui';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 import 'package:wegesha_client/config/theme.dart';
 import 'package:wegesha_client/screens/appointment.dart';
 import 'package:wegesha_client/widget/Button.dart';
 import 'package:wegesha_client/widget/datewidget.dart';
-import 'package:intl/intl.dart';
 import 'package:wegesha_client/widget/timewidget.dart';
 
 import '../helper/alertFunctions.dart';
@@ -18,14 +16,17 @@ import '../model/hcp.dart';
 import '../widget/listTileWidget.dart';
 
 class Detail extends StatefulWidget {
-  Detail({required this.hcp});
+  Detail({required this.id, required this.hcp});
   final HCP hcp;
+  final String id;
+
   @override
   State<Detail> createState() => _DetailState();
 }
 
 class _DetailState extends State<Detail> {
   List<String> timeList = [];
+
   List<String> generateTimeList() {
     DateTime currentTime = DateTime.now().add(const Duration(hours: 1));
 
@@ -38,12 +39,18 @@ class _DetailState extends State<Detail> {
     return timeList;
   }
 
+  late List<Map<String, dynamic>> result;
+  @override
+  void initState() {
+    result = getDatesAndDaysUntilEndOfMonth();
+    super.initState();
+  }
+
   Widget getTimeWidget(Function(String) onSelected) {
     int i = 0;
     List<Widget> listTime = [];
     generateTimeList();
     while (timeList.length > i) {
-      print(i);
       listTime.add(Time(
         time: timeList[i],
         onSelected: onSelected,
@@ -55,7 +62,9 @@ class _DetailState extends State<Detail> {
 
   String selectedTime = '';
   void onSelected(String time) {
-    selectedTime = time;
+    setState(() {
+      selectedTime = time;
+    });
     print(selectedDate);
     print(selectedDay);
     print(selectedTime);
@@ -95,65 +104,67 @@ class _DetailState extends State<Detail> {
 
   String selectedDate = '';
   String selectedDay = '';
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text(
-            "Doctor Detail",
-            style: GoogleFonts.inter(
-              color: ColorTheme.black,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Doctor Detail",
+          style: GoogleFonts.inter(
+            color: ColorTheme.black,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
           ),
-          leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios, color: ColorTheme.black),
+        ),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios, color: ColorTheme.black),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert, color: ColorTheme.black),
             onPressed: () {
               Navigator.pop(context);
             },
           ),
-          actions: [
-            IconButton(
-              icon: Icon(Icons.more_vert, color: ColorTheme.black),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-        body: SafeArea(
-            child: SingleChildScrollView(
-          child: Column(children: [
-            ListTileWidget(
-              size: size,
-              name: 'Dr. ${widget.hcp.firstname} ${widget.hcp.lastName}',
-              distance: "100KM",
-              filedStudy: widget.hcp.specialty,
-              rate: 4,
-              hcp: widget.hcp,
-              imageUrl: widget.hcp.profilePicture,
-            ),
-            Container(
-              child: RatingBar.builder(
-                 initialRating: widget.hcp.rated,
-                 minRating: 1,
-                 direction: Axis.horizontal,
-                 allowHalfRating: true,
-                 itemCount: 5,
-                 itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
-                 itemBuilder: (context, _) => Icon(
-                   Icons.star,
-                   color: Colors.amber,
-                 ),
-                 onRatingUpdate: (rating) {
-                   print(rating);
-                 },
+        ],
+      ),
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              ListTileWidget(
+                size: size,
+                name: 'Dr. ${widget.hcp.firstname} ${widget.hcp.lastName}',
+                distance: "100KM",
+                filedStudy: widget.hcp.specialty,
+                rate: widget.hcp.rated,
+                hcp: widget.hcp,
+                imageUrl: widget.hcp.profilePicture,
               ),
-            ),
-            Container(
+              Container(
+                child: RatingBar.builder(
+                  initialRating: widget.hcp.rated,
+                  minRating: 1,
+                  direction: Axis.horizontal,
+                  allowHalfRating: true,
+                  itemCount: 5,
+                  itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+                  itemBuilder: (context, _) => Icon(
+                    Icons.star,
+                    color: Colors.amber,
+                  ),
+                  onRatingUpdate: (rating) {
+                    print(rating);
+                  },
+                ),
+              ),
+              Container(
                 margin: EdgeInsets.only(
                     top: size.height * 0.03, left: size.width * 0.04),
                 alignment: Alignment.topLeft,
@@ -164,74 +175,102 @@ class _DetailState extends State<Detail> {
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),
-                )),
-            Container(
+                ),
+              ),
+              Container(
                 margin: EdgeInsets.only(
                     top: size.height * 0.03, left: size.width * 0.04),
                 alignment: Alignment.topLeft,
                 child: RichText(
                   text: TextSpan(
-                      text:
-                          "Dr. ${widget.hcp.firstname} ${widget.hcp.lastName} is a dedicated and experienced healthcare professional specializing in ${widget.hcp.experienceYears}.  They are passionate about providing comprehensive and compassionate care to their patients, focusing on ${widget.hcp.specialty}. ",
-                      style: GoogleFonts.inter(
-                        color: ColorTheme.gray,
-                        fontSize: 15,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'Read more',
-                          style: GoogleFonts.inter(
-                            color: ColorTheme.primaryColor,
-                            fontSize: 15,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          recognizer: TapGestureRecognizer()..onTap = () {},
-                        )
-                      ]),
-                )),
-            Container(
-              height: size.height * 0.15,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: getDatesAndDaysUntilEndOfMonth().length,
-                itemBuilder: (ctx, index) {
-                  final itemsList = getDatesAndDaysUntilEndOfMonth();
-                  final slicedDate = itemsList[index]['date'].split("-")[2];
-                  final slicedDay = itemsList[index]['day'].substring(0, 3);
-                  return DateOfMonth(
+                    text:
+                        "Dr. ${widget.hcp.firstname} ${widget.hcp.lastName} is a dedicated and experienced healthcare professional specializing in ${widget.hcp.experienceYears}.  They are passionate about providing comprehensive and compassionate care to their patients, focusing on ${widget.hcp.specialty}. ",
+                    style: GoogleFonts.inter(
+                      color: ColorTheme.gray,
+                      fontSize: 15,
+                    ),
+                    children: [
+                      TextSpan(
+                        text: 'Read more',
+                        style: GoogleFonts.inter(
+                          color: ColorTheme.primaryColor,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        recognizer: TapGestureRecognizer()..onTap = () {},
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                height: size.height * 0.15,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: result.length,
+                  itemBuilder: (ctx, index) {
+                    final itemsList = result;
+                    final slicedDate = itemsList[index]['date'].split("-")[2];
+                    final slicedDay = itemsList[index]['day'].substring(0, 3);
+                    return DateOfMonth(
                       date: slicedDate,
                       day: slicedDay,
-                      onSelected: _onselectedDateofMonth);
-                },
+                      onSelected: _onselectedDateofMonth,
+                    );
+                  },
+                ),
               ),
-            ),
-            getTimeWidget(onSelected),
-            Container(
-              margin: EdgeInsets.only(
-                  top: size.height * 0.02, bottom: size.height * 0.02),
-              child: Button(
+              getTimeWidget(onSelected),
+              Container(
+                margin: EdgeInsets.only(
+                    top: size.height * 0.02, bottom: size.height * 0.02),
+                child: Button(
                   title: "Book Apointment",
                   height: 0.07,
                   width: 0.75,
                   onTap: () {
-                    if (selectedDate != '' || selectedDay != '') {
-                      Navigator.push(
+                    if (selectedDate != '' && selectedTime != '') {
+                      try {
+                        print("doctorId: ${widget.id}");
+                        final now = DateTime.now();
+                        final dateFormat = DateFormat('yyyy-MM');
+                        final dateTimeString = '$selectedDate $selectedTime';
+                        final dateTime =
+                            DateFormat('dd hh:00 a').parse(dateTimeString);
+                        final formattedDateTime =
+                            '${dateFormat.format(now)}-${dateTime.day.toString().padLeft(2, '0')} ${dateTime.hour.toString().padLeft(2, '0')}:${dateTime.minute.toString().padLeft(2, '0')}';
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => Appointment(
-                                    hcp: widget.hcp,
-                                    selectedDate: selectedDate,
-                                    selectedDay: selectedDay,
-                                    selectedTime: selectedTime
-                                  )));
+                            builder: (context) => Appointment(
+                              id: widget.id,
+                              hcp: widget.hcp,
+                              selectedDate: DateTime.parse(formattedDateTime),
+                              selectedDay: selectedDay,
+                              selectedTime: selectedTime,
+                            ),
+                          ),
+                        );
+                      } catch (e) {
+                        errorAllertCaller(
+                            content: "Scheduled Date and Time are required!",
+                            sec: 20,
+                            context: context);
+                      }
                     } else {
                       errorAllertCaller(
-                          content: "Scheduled Date and Timer are required!", sec: 20, context: context);
+                          content: "Scheduled Date and Time are required!",
+                          sec: 20,
+                          context: context);
                     }
                   },
-                  isElevated: true),
-            ),
-          ]),
-        )));
+                  isElevated: true,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

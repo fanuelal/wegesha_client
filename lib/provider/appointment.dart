@@ -6,36 +6,55 @@ import '../model/appointment.dart';
 import 'package:http/http.dart' as http;
 
 class AppointmentService extends ChangeNotifier {
-  List<Appointment> appointments = [
-    Appointment(
+  List<AppointmentModel> appointments = [
+    AppointmentModel(
         doctorId: "",
+        patientId: '',
         imageUrl: "imageUrl",
         name: "Dr. Helene Alemayehu",
-        date: "jul 20, 2024",
+        date: DateTime.now(),
         time: "2:00AM",
         status: "pending",
+        location: '11.23,23.32',
         fieldType: "Neurology")
   ];
 
-  Future<void> createAppointment(Appointment appointment) async {
+  Future<void> createAppointment(
+      AppointmentModel appointment, String token) async {
     try {
-      final response =
-          await http.post(Uri.parse('${Utils.baseUrl}/appointment'), 
-          body: jsonEncode(appointment),
-          headers: {
+      print(appointment.id);
+      print("doctor ID: ${appointment.doctorId}");
+      print("ID: ${appointment.id}");
+      print("patient: ${appointment.patientId}");
 
-          }
-          );
+      final response = await http.post(
+        Uri.parse('${Utils.baseUrl}/appointment'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          "patientId": appointment.patientId,
+          "doctorId": appointment.doctorId,
+          "dateTime": appointment.date.toIso8601String(),
+          "status": "Pending",
+          "UserLocation": appointment.location,
+          "notes": "Initial consultation",
+        }),
+      );
+
       final decodedData = jsonDecode(response.body);
       if (response.statusCode == 200) {
         appointments.add(appointment);
+      } else {
+        print('Error: ${decodedData['message']}');
       }
     } catch (error) {
-      print(error);
+      print('Error: $error');
     }
   }
 
-  Future<void> deleteAppointment(Appointment appointment) async {
+  Future<void> deleteAppointment(AppointmentModel appointment) async {
     try {
       final response = await http
           .delete(Uri.parse('${Utils.baseUrl}/appointment/${appointment.id}'));

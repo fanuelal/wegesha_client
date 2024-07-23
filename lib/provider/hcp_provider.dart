@@ -92,23 +92,30 @@ class Hcp_Provider extends ChangeNotifier {
     return homeFiltered;
   }
 
-  Future<List<HCP>> getAll(String accessToken) async {
+ 
+Future<List<HCP>> getAllHCP(String accessToken) async {
+  try {
     final response =
         await http.get(Uri.parse('${Utils.baseUrl}/hcp'), headers: {
       'Content-Type': 'application/json',
-      'Authorization': 'Bearer ${accessToken}',
-    });
+      'Authorization': 'Bearer $accessToken',
+    }); 
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
-     List<HCP> newHcpList = [];
-if (data['data'] != null && data['data'].isNotEmpty) {
-  List<dynamic> dynamicList = data['data'];
-  newHcpList = dynamicList.map((json) => HCP.fromJson(json)).toList();
-}
+      List<HCP> newHcpList = [];
+      if (data['data'] != null && data['data'].isNotEmpty) {
+        List<dynamic> dynamicList = data['data'];
+        newHcpList = dynamicList.map((json) => HCP.fromJson(json)).toList();
+      }
       hpcs.addAll(newHcpList);
       return hpcs;
     } else {
+      print('Error: Response status is not 200');
       return [];
     }
+  } catch (error) {
+    print('Error on HCP fetching: $error');
+    return [];
   }
+}
 }

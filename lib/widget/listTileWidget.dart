@@ -25,7 +25,7 @@ class ListTileWidget extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => Detail(hcp: hcp)));
+            .push(MaterialPageRoute(builder: (context) => Detail(hcp: hcp, id: '',)));
       },
       child: Container(
         padding: EdgeInsets.all(8.0),
