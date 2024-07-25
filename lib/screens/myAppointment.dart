@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
 import 'package:wegesha_client/config/theme.dart';
+import 'package:wegesha_client/provider/appointment.dart';
+import '../provider/auth.dart';
 import '../widget/ScheduledHPC.dart';
 
 class MyAppointment extends StatefulWidget {
@@ -13,8 +16,32 @@ class MyAppointment extends StatefulWidget {
 
 class _MyAppointmentState extends State<MyAppointment> {
   @override
+    void didChangeDependencies() {
+    super.didChangeDependencies();
+    fetch(); // Call fetch here to ensure context is available
+  }
+
+  Future<void> fetch() async {
+    final apptProvider = Provider.of<AppointmentService>(context, listen: false);
+    final auth = Provider.of<Auth>(context);
+    await apptProvider.fetchAppointmentsByPatient(
+        auth.userProfile.id, auth.accessToken);
+    // Call setState to update UI after fetching data
+    setState(() {});
+  }
+
+LatLng getLatLng(String _location) {
+    final coordinates = _location.split(',');
+    final lat = double.parse(coordinates[0]);
+    final lng = double.parse(coordinates[1]);
+    return LatLng(lat, lng);
+
+}
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final apptProvider = Provider.of<AppointmentService>(context);
+    final appointments = apptProvider.appointments;
     return SafeArea(
       child: Scaffold(
         body: Container(
@@ -26,7 +53,7 @@ class _MyAppointmentState extends State<MyAppointment> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
-                      "Schedule",
+                      "My Appointments",
                       style: GoogleFonts.inter(
                           fontSize: 18, fontWeight: FontWeight.bold),
                     ),
@@ -43,36 +70,25 @@ class _MyAppointmentState extends State<MyAppointment> {
               SizedBox(
                 height: size.height * 0.04,
               ),
-              ScheduledHCP(
-                  size: size,
-                  imageUrl:
-                      "https://st2.depositphotos.com/1158045/6457/i/450/depositphotos_64572953-stock-photo-smiling-doctor-at-hospital.jpg",
-                  name: "Dr. Henery Talu",
-                  date: "02/03/24",
-                  time: "2:00 PM",
-                  status: "Confirmed",
-                  fieldType: "Chardiologyst",
-                  location: LatLng(11.2, 50.30),),
-              ScheduledHCP(
-                  size: size,
-                  imageUrl:
-                      "https://media.istockphoto.com/id/1203995945/photo/portrait-of-mature-male-doctor-wearing-white-coat-standing-in-hospital-corridor.jpg?s=612x612&w=0&k=20&c=Hk-dqLqHXyYa4aTqjieXNk9-HQSE8WEYUAjA1sXsy_s=",
-                  name: "Dr. Amanuel Tadese",
-                  date: "03/07/24",
-                  time: "8:00 PM",
-                  status: "cancled",
-                  fieldType: "Chardiologyst",
-                  location: LatLng(11.2, 50.30)),
-              ScheduledHCP(
-                  size: size,
-                  imageUrl:
-                      "https://thumbs.dreamstime.com/b/portrait-positive-black-doctor-holding-medical-chart-male-over-white-background-178499631.jpg",
-                  name: "Dr. Aklilu Talu",
-                  date: "02/03/24",
-                  time: "2:00 PM",
-                  status: "Upcomming",
-                  fieldType: "Chardiologyst",
-                  location: LatLng(11.2, 50.30))
+              ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: appointments.length,
+                itemBuilder: (context, index) {
+                  final appointment = appointments[index];
+                  return ScheduledHCP(
+                    size: size,
+                    id: appointment.id,
+                    imageUrl: appointment.imageUrl,
+                    name: appointment.name,
+                    date: appointment.date.toIso8601String(),
+                    time: appointment.time,
+                    status: appointment.status,
+                    fieldType: appointment.fieldType,
+                    location: getLatLng(appointment.location),
+                  );
+                },
+              ),
             ]),
           ),
         ),

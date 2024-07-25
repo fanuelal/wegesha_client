@@ -4,15 +4,18 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:wegesha_client/provider/auth.dart';
 import 'package:wegesha_client/screens/callScreen.dart';
 
 import '../config/theme.dart';
+import '../model/hcp.dart';
 
 class MapScreen extends StatefulWidget {
-  const MapScreen({super.key});
-
+  const MapScreen({required this.id});
+  final String id;
   @override
   State<MapScreen> createState() => _MapScreenState();
 }
@@ -123,6 +126,7 @@ class _MapScreenState extends State<MapScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final auth = Provider.of<Auth>(context);
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
@@ -182,7 +186,7 @@ class _MapScreenState extends State<MapScreen> {
                   onPressed: () {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => PrebuiltCallPage(
-                              callId: 'videoCall_00wegesha',
+                              callId: '${auth.userProfile.id} ${widget.id}',
                             )));
                   },
                   child: const Icon(Icons.video_call),

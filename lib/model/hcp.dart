@@ -13,8 +13,7 @@ class HCP {
   final String profilePicture;
   final description;
   HCP(
-      {
-      this.id = '',
+      {this.id = '',
       required this.specialty,
       required this.experienceYears,
       required this.rateCount,
@@ -23,10 +22,16 @@ class HCP {
       this.isOnline = false,
       required this.lastName,
       this.phoneNumber = "",
-      required this.profilePicture,
+      this.profilePicture =
+          'https://img.freepik.com/premium-photo/international-doctors-day-illustration-doctorshappy-doctors-day-ai-generated_852336-19213.jpg',
       required this.description});
 
-factory HCP.fromJson(Map<String, dynamic> json) {
+  factory HCP.fromJson(Map<String, dynamic> json) {
+    var profilePicture = json['profilePicture'] == ''
+        ? 'https://img.freepik.com/premium-photo/international-doctors-day-illustration-doctorshappy-doctors-day-ai-generated_852336-19213.jpg'
+        : json['profilePicture'];
+    print(json['profilePicture']);
+    print(json['profilePicture'] ?? 'hellow world');
     return HCP(
       id: json['id'] ?? '',
       specialty: json['specialty'] ?? '',
@@ -37,7 +42,7 @@ factory HCP.fromJson(Map<String, dynamic> json) {
       lastName: json['lastName'] ?? '',
       phoneNumber: json['phoneNumber'] ?? '',
       isOnline: json['isOnline'] ?? false,
-      profilePicture: json['profilePicture'] ?? '',
+      profilePicture: profilePicture,
       description: json['description'] ?? '',
     );
   }

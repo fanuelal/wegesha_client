@@ -7,16 +7,16 @@ import 'package:http/http.dart' as http;
 
 class AppointmentService extends ChangeNotifier {
   List<AppointmentModel> appointments = [
-    AppointmentModel(
-        doctorId: "",
-        patientId: '',
-        imageUrl: "imageUrl",
-        name: "Dr. Helene Alemayehu",
-        date: DateTime.now(),
-        time: "2:00AM",
-        status: "pending",
-        location: '11.23,23.32',
-        fieldType: "Neurology")
+    // AppointmentModel(
+    //     doctorId: "",
+    //     patientId: '',
+    //     imageUrl: "imageUrl",
+    //     name: "Dr. Helene Alemayehu",
+    //     date: DateTime.now(),
+    //     time: "2:00AM",
+    //     status: "pending",
+    //     location: '11.23,23.32',
+    //     fieldType: "Neurology")
   ];
 
   Future<void> createAppointment(
@@ -51,6 +51,35 @@ class AppointmentService extends ChangeNotifier {
       }
     } catch (error) {
       print('Error: $error');
+    }
+  }
+
+  Future<void> fetchAppointmentsByPatient(
+      String patientId, String token) async {
+    final url = Uri.parse('${Utils.baseUrl}/appointment/patient/$patientId');
+
+    try {
+      final response = await http.get(url, headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      });
+      if (response.statusCode == 200) {
+        final List<dynamic> responseData =
+            json.decode(response.body)['data'] ?? [];
+        appointments = [];
+        responseData.forEach((item) {
+          // print("from the provider side: $item");
+          appointments.add(AppointmentModel.fromJson(item));
+        });
+        print(appointments);
+        notifyListeners();
+      } else {
+        print('error on load appointments ${response.body}');
+        // throw Exception('Failed to load appointments');
+      }
+    } catch (error) {
+      // throw error;
+      print(error);
     }
   }
 

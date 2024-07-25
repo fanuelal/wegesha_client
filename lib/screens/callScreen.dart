@@ -51,7 +51,7 @@ class PrebuiltCallPageState extends State<PrebuiltCallPage> {
                 appID: 1278021714,
                 appSign:
                     "ccafe86f42e6de1f616ab905b351b02e0e7f69a896c0c299c3699f3ef741421c",
-                userID: userProfile.id,
+                userID: userProfile.email,
                 userName: "${userProfile.firstName} ${userProfile.lastName}",
                 callID: "${widget.callId}",
                 config: config,

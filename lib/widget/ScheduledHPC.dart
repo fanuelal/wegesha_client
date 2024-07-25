@@ -1,23 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher_icons/main.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 
 import '../config/theme.dart';
 import '../screens/mapScreen.dart';
 
 class ScheduledHCP extends StatelessWidget {
-  const ScheduledHCP(
+  ScheduledHCP(
       {super.key,
+      required this.id,
       required this.size,
-      required this.imageUrl,
+      this.imageUrl = 'https://img.lovepik.com/photo/40013/3144.jpg_wh860.jpg',
       required this.name,
       required this.date,
       required this.time,
       required this.status,
       required this.fieldType,
       required this.location});
-
-  final String imageUrl;
+  final String id;
+  String imageUrl;
   final String name;
   final String date;
   final String time;
@@ -25,13 +28,16 @@ class ScheduledHCP extends StatelessWidget {
   final String fieldType;
   final Size size;
   final LatLng location;
+  final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.of(context)
-            .push(MaterialPageRoute(builder: (context) => MapScreen()));
+        Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => MapScreen(
+                  id: id,
+                )));
       },
       child: Container(
         margin: EdgeInsets.symmetric(
@@ -51,12 +57,12 @@ class ScheduledHCP extends StatelessWidget {
                 Column(
                   children: [
                     Text(
-                      "DR muluneh weldu",
+                      name,
                       style: GoogleFonts.inter(
                           fontSize: 18, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "Chardiologist",
+                      fieldType,
                       style: GoogleFonts.inter(
                         color: ColorTheme.gray,
                         fontSize: 16,
@@ -66,8 +72,7 @@ class ScheduledHCP extends StatelessWidget {
                 ),
                 CircleAvatar(
                   radius: size.width * 0.08,
-                  backgroundImage: NetworkImage(
-                      "https://st2.depositphotos.com/1158045/6457/i/450/depositphotos_64572953-stock-photo-smiling-doctor-at-hospital.jpg"),
+                  backgroundImage: NetworkImage(imageUrl),
                 )
               ],
             ),
@@ -84,7 +89,7 @@ class ScheduledHCP extends StatelessWidget {
                   width: size.width * 0.015,
                 ),
                 Text(
-                  "02/03/16",
+                  date.split(':')[0],
                   style: GoogleFonts.inter(
                     color: ColorTheme.darkGray,
                   ),
@@ -100,7 +105,7 @@ class ScheduledHCP extends StatelessWidget {
                   width: size.width * 0.015,
                 ),
                 Text(
-                  "2:00 PM",
+                  "2:00",
                   style: GoogleFonts.inter(
                     color: ColorTheme.darkGray,
                   ),
@@ -110,13 +115,17 @@ class ScheduledHCP extends StatelessWidget {
                 ),
                 CircleAvatar(
                   radius: size.width * 0.008,
-                  backgroundColor: Colors.green,
+                  backgroundColor: status == 'cancled'
+                      ? Colors.red
+                      : status == 'pending'
+                          ? Colors.amber
+                          : Colors.green,
                 ),
                 SizedBox(
                   width: size.width * 0.01,
                 ),
                 Text(
-                  "Confirmed",
+                  status,
                   style: GoogleFonts.inter(
                     color: ColorTheme.darkGray,
                   ),
