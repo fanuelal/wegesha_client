@@ -2,8 +2,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import 'package:wegesha_client/config/theme.dart';
+import 'package:wegesha_client/model/hcp.dart';
+import 'package:wegesha_client/provider/hcp_provider.dart';
+import 'package:wegesha_client/screens/home_screen.dart';
 
+import '../widget/bottomNavBar.dart';
 import '../widget/listTileWidget.dart';
 
 class Doctor {
@@ -22,89 +27,67 @@ class Doctor {
   });
 }
 
-class list_doctor extends StatefulWidget {
-  const list_doctor({super.key});
+class List_doctor extends StatefulWidget {
+  const List_doctor({super.key});
 
   @override
-  State<list_doctor> createState() => list_doctorState();
+  State<List_doctor> createState() => list_doctorState();
 }
 
-class list_doctorState extends State<list_doctor> {
-  List<Doctor> doctors = [
-    Doctor(
-      name: 'Dr.Yared Lemma',
-      photoUrl:
-          'https://www.regencymedicalcentre.com/wp-content/uploads/2018/03/black-doctor-bg-transparent-e1483021130255.png',
-      description: 'Orthopedist',
-      location: '200m away',
-      star: '4.7',
-    ),
-    Doctor(
-      name: 'Dr.Fanuel Alemaw',
-      photoUrl:
-          'https://www.meonly.live/wp-content/uploads/2018/04/doctor-pic13-600x459.png',
-      description: 'Charadiologist',
-      location: '500m away',
-      star: '4.7',
-    ),
-    Doctor(
-      name: 'Dr.Marina Elena',
-      photoUrl:
-          'https://madamefigaro.cy/wp-content/uploads/2021/08/doctor-pic-bg.png',
-      description: 'Orthopedist',
-      location: '200m away',
-      star: '4.7',
-    ),
-    Doctor(
-      name: 'Dr.Kidsit Mamaye ',
-      photoUrl: 'https://pluspng.com/img-png/png-woman-doctor--602.png',
-      description: 'Psychologist',
-      location: '800m away',
-      star: '4.7',
-    ),
-    Doctor(
-      name: 'Dr.Hermela Asamenew ',
-      photoUrl:
-          'https://i.pinimg.com/originals/7c/23/13/7c2313f8d49ff41e48982af55d5938f9.png',
-      description: 'Orthopedist',
-      location: '700m away',
-      star: '4.7',
-    ),
+class list_doctorState extends State<List_doctor> {
+  List<String> distances = [
+    "10.5KM",
+    "15.3KM",
+    "12.23KM",
+    "22.4KM",
+    "10.5KM",
+    "15.3KM",
+    "12.23KM",
+    "22.4KM",
   ];
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final hcpProvider = Provider.of<Hcp_Provider>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        // ignore: prefer_const_constructors
         title: Text(
-            "Top Doctor",
-            style: GoogleFonts.inter(
-              color: ColorTheme.black,
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-            ),
+          "Top Doctor",
+          style: GoogleFonts.inter(
+            color: ColorTheme.black,
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
           ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {},
-          )
-        ],
+        ),
         leading: IconButton(
             onPressed: () {},
             icon: IconButton(
-                onPressed: () {}, icon: const Icon(Icons.arrow_back_ios))),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                icon: const Icon(Icons.arrow_back_ios))),
       ),
       body: SafeArea(
-        child: ListView.builder(
-          itemCount: doctors.length,
-          itemBuilder: (context, index) {
-            Doctor doctor = doctors[index];
-            return ListTileWidget(size: size);
-          },
+        child: Container(
+          height: size.height,
+          child: ListView.builder(
+            itemCount: hcpProvider.hpcs.length,
+            itemBuilder: (context, index) {
+              HCP hcp = hcpProvider.hpcs[index];
+              return ListTileWidget(
+                size: size,
+                name: 'Dr. ${hcp.firstname} ${hcp.lastName}',
+                distance: distances[index],
+                filedStudy: hcp.specialty,
+                rate: 4,
+                hcp: hcp,
+                imageUrl: hcp.profilePicture,
+              );
+            },
+          ),
         ),
       ),
     );
